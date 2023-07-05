@@ -7,25 +7,6 @@
   padding: 0.1em 1em;
 }
 
-#search-form {
-  position: relative;
-  width: 20%;
-}
-
-#search-form svg {
-  position: absolute;
-  top: 10px;
-  left: 9px;
-}
-
-#search-form input {
-  padding-left: 2.5em;
-  border: none;
-  border-radius: 5px;
-  width: 100%;
-  margin: 0;
-}
-
 #nav-links {
   display: flex;
   align-items: center;
@@ -43,10 +24,24 @@
   font-size: 1.5em;
 }
 
-.icons {
-  text-align: center;
+nav span {
+  border-radius: 10px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgb(0, 0, 0);
+  padding: 5px;
+  background-color: #8FF2FF;
+  color: #000000;
+  border: 1px solid #000000;
 }
 
-.icons span{
-  display: block; 
+nav span:hover {
+  border-radius: 10px;
+  background-color: #000000;
+  color: #8FF2FF;
+  border: 1px solid #8FF2FF;
+  display: fixed;
+}
+
+#nav a img {
+  width: 70px;
 }

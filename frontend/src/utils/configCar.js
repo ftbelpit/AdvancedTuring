@@ -1,7 +1,5 @@
-export const api = "http://89.117.32.61:5000/api"
-export const uploads = "http://89.117.32.61:5000/uploads"
-// export const api = "http://localhost:5000/api"
-// export const uploads = "http://localhost:5000/uploads"
+export const api = "http://localhost:5000/api"
+export const uploads = "http://localhost:5000/uploads"
 
 export const requestConfig = (method, data, token = null) => {
   let config;

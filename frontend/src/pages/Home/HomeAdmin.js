@@ -56,7 +56,7 @@ const HomeAdmin = () => {
               </div>
               <div className="home-assets-buttons">
                 <Link to={`/assessments/${washer._id}`}>
-                  <button className="button-assessment">Ver avaliações</button>
+                  <button className="btn button-assessment">Ver avaliações</button>
                 </Link>               
               </div>
             </div>

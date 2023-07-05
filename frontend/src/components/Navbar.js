@@ -1,5 +1,8 @@
 import "./Navbar.css"
 
+// Assets
+import logo from "../assets/turingwash-logo.svg"
+
 // Components 
 import {NavLink, Link} from "react-router-dom"
 
@@ -43,7 +46,9 @@ const Navbar = () => {
     <nav id="nav">
         {authAdmin ? (
           <>
-            <Link to="/home_admin">TuringWash</Link>
+            <Link to="/home_admin">
+              <img src={logo} alt="Turing Wash" className="logo" />
+            </Link>
             <ul id="nav-links">
               <li>
                 <NavLink to="/myusers">
@@ -59,7 +64,9 @@ const Navbar = () => {
           <>
             {auth && (
               <>
-                <Link to={`/${userAuth?._id ?? ""}`}>TuringWash</Link>
+                <Link to={`/${userAuth?._id ?? ""}`}>
+                  <img src={logo} alt="Turing Wash" className="logo" />
+                </Link>
                 <ul id="nav-links">
                   {userAuth && (
                     <li>
@@ -83,7 +90,7 @@ const Navbar = () => {
             )}   
             {!auth && !authAdmin && (
               <>
-                <Link to={`/${userAuth?._id ?? ""}`}>TuringWash</Link>
+                <img src={logo} alt="Turing Wash" className="logo" />
                 <ul id="nav-links">
                   <li>
                     <NavLink to="/login">Entrar</NavLink>

@@ -1,6 +1,6 @@
 import "./Assessments.css";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getWasher, resetMessage, assessments } from "../../slices/washerSlice";
 import { useParams } from "react-router-dom";
@@ -24,14 +24,29 @@ const Assessments = () => {
     error: errorWasher,
   } = useSelector((state) => state.washer);
 
-  const [showForm, setShowForm] = useState(false);
-  const [ , setShowButton] = useState(true);
+  const [showPopup, setShowPopup] = useState(false);
   const [score, setScore] = useState("")
   const [assessment, setAssessment] = useState("")
+
+  const popupRef = useRef(null);
 
   useEffect(() => {
     dispatch(getWasher(id));
   }, [dispatch, id]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        setShowPopup(false);
+      }
+    };
+  
+    document.addEventListener("mousedown", handleClickOutside);
+  
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);  
 
   const resetComponentMessage = () => {
     setTimeout(() => {
@@ -52,24 +67,14 @@ const Assessments = () => {
 
     setScore("")
     setAssessment("")
-    setShowForm(false);
-    setShowButton(true);
 
     resetComponentMessage();
   };
 
   const handleRateButtonClick = () => {
-    setShowForm(!showForm);
-    setShowButton(!showForm);
+    setShowPopup(true);
   };
-  
-  const handleButtonText = () => {
-    if (showForm) {
-      return 'Ocultar';
-    } else {
-      return 'Avaliar';
-    }
-  };
+
 
   if (loading) {
     return <p>Carregando...</p>;
@@ -80,42 +85,53 @@ const Assessments = () => {
       <h2 className="profile-title">Avaliações do Lavador</h2>
       <div className="washer">
         <WasherItem washer={washer} />
-        {user && (
+        {user && !showPopup && (
           <button className="rate-button" onClick={handleRateButtonClick}>
-            {handleButtonText()}
+            Avaliar
           </button>
         )}
       </div>
       <div>
         {washer.assessments && (
           <>
-            {showForm && (
-              <div className="form-container">
-                <h2>Avaliar Lavador</h2>
-                <form onSubmit={handleAssessment}>
-                  <label>Nota (0 a 5):</label>
-                  <input
-                    className="input"
-                    type="number"
-                    placeholder="Insira a sua nota" 
-                    onChange={(e) => setScore(e.target.value)} 
-                    value={score || ""}
-                  />
-                  <label>Avaliação:</label>
-                  <textarea
-                    className="textarea"
-                    maxLength={200}
-                    placeholder="Insira a sua avaliação" 
-                    onChange={(e) => setAssessment(e.target.value)} 
-                    value={assessment || ""}
-                  />
-                  <div className="button-container">
-                    {!loadingWasher && <input type="submit" value="Enviar Avaliação" />}
-                    {loadingWasher && <input type="submit" disabled value="Aguarde..." />}
+            {showPopup && (
+              <div
+                className="overlay"
+                onClick={(e) => {
+                  if (popupRef.current && !popupRef.current.contains(e.target)) {
+                    setShowPopup(false);
+                  }
+                }}
+              >
+                <div className="popup" ref={popupRef}>
+                  <div className="popup-content">
+                    <h2>Avaliar Lavador</h2>
+                    <form onSubmit={handleAssessment}>
+                      <label>Nota (0 a 5):</label>
+                      <input
+                        className="input"
+                        type="text"
+                        placeholder="Insira a sua nota" 
+                        onChange={(e) => setScore(e.target.value)} 
+                        value={score || ""}
+                      />
+                      <label>Avaliação:</label>
+                      <textarea
+                        className="textarea"
+                        maxLength={200}
+                        placeholder="Insira a sua avaliação" 
+                        onChange={(e) => setAssessment(e.target.value)} 
+                        value={assessment || ""}
+                      />
+                      <div className="button-container">
+                        {!loadingWasher && <input type="submit" value="Enviar Avaliação" />}
+                        {loadingWasher && <input type="submit" disabled value="Aguarde..." />}
+                      </div>
+                      {errorWasher && <Message msg={errorWasher} type="error" />}
+                      {messageWasher && <Message msg={messageWasher} type="success" />}
+                    </form>
                   </div>
-                  {errorWasher && <Message msg={errorWasher} type="error" />}
-                  {messageWasher && <Message msg={messageWasher} type="success" />}
-                </form>
+                </div>
               </div>
             )}
             <h3>Avaliações: ({washer.assessments.length})</h3>

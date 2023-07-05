@@ -15,6 +15,7 @@
   font-size: 0.97em;
   background-color: white;
   border-radius: 10px;
+  box-shadow: 0 2px 8px rgb(0, 0, 0);
 }
 
 span {

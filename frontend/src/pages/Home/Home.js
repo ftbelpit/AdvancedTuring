@@ -13,6 +13,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import WasherItem from "../../components/WasherItem";
 
 const Home = () => {
+  const [showPopup, setShowPopup] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState("name");
   const [selectedCar, setSelectedCar] = useState(null);
 
@@ -39,7 +40,9 @@ const Home = () => {
   };
 
   const handleWashButtonClick = (washerName) => {
-    if (selectedCar) {
+    if (!selectedCar) {
+      setShowPopup(true);
+    } else {
       const { fabricante, modelo } = selectedCar;
   
       // Combinar os parâmetros em uma única string
@@ -48,14 +51,17 @@ const Home = () => {
       )}&modeloParam=${encodeURIComponent(modelo)}&washerName=${encodeURIComponent(
         washerName
       )}`;
-
+  
       resetComponentMessage();
   
       // Redirecionar para a página AddWash com os parâmetros combinados
       navigate(`/addwash/${user._id}?${params}`);
     }
   };
-  
+
+  const closePopup = () => {
+    setShowPopup(false);
+  };
   
   const handleSelectOrder = (e) => {
     const order = e.target.value;
@@ -113,7 +119,7 @@ const Home = () => {
         <h2>Lavadores disponíveis próximos de você...</h2>
       </div>
       <div className="home-options">
-        <div>
+        <div className="select">
           <span>Lavar:</span>
           <select
             className="select-car"
@@ -131,14 +137,14 @@ const Home = () => {
                 <option
                   key={car._id}
                   value={car._id}
-                  className="select-button"             
+                  className="select-button"
                 >
                   {car.fabricante} {car.modelo}
                 </option>
               ))}
           </select>
         </div>
-        <div>
+        <div className="select2">
           <span>Ordenar por:</span>
           <select
             className="select-ordem"
@@ -152,6 +158,15 @@ const Home = () => {
           </select>
         </div>
       </div>
+      {showPopup && (
+        <>
+          <div className="overlay"></div>
+          <div className="popup">
+            <p>Por favor, selecione um carro antes de escolher o lavador.</p>
+            <button onClick={closePopup}>Fechar</button>
+          </div>
+        </>
+      )}
       {orderedWashers.map((washer) => {
         let totalScore = 0;
 
@@ -178,11 +193,11 @@ const Home = () => {
               </div>
               <div className="home-assets-buttons">
                 <Link to={`/assessments/${washer._id}`}>
-                  <button className="button-assessment">Ver avaliações</button>
+                  <button className="btn button-assessment">Ver avaliações</button>
                 </Link>
                 <button
                   type="submit"
-                  className="button-wash"
+                  className="btn button-wash"
                   onClick={() => handleWashButtonClick(washer.name)}
                 >
                   Lavar meu carro
