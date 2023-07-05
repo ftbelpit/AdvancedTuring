@@ -1,0 +1,28 @@
+#users {
+  width: 50%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 40px;
+}
+
+.profile-user{
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-size: 0.97em;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.see-cars {
+  display: flex;
+  align-items: center;
+}

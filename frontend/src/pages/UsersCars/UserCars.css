@@ -1,0 +1,36 @@
+#profile {
+  width: 50%;
+  margin: 0 auto;
+  display:flex;
+  flex-direction: column;
+  padding-bottom: 40px;
+  text-transform: capitalize;
+}
+
+.profile-cars{
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  font-size: 0.97em;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.delete-button {
+  border-radius: 10px;
+  background-color: #FF9B9B;
+  border: none;
+  width: 125px;
+  height: 30px;
+  padding-top: 5px;
+  margin-top: 40px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+}
+span {
+  font-weight: bold;
+}

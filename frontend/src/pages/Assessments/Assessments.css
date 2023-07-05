@@ -1,0 +1,84 @@
+#assessments {
+  width: 50%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 40px;
+}
+
+.assessment-user{
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-size: 0.97em;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.assessment-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.assessment-info span{
+  padding: 3px;
+  font-size: 1em;
+}
+
+.assessment-info .name {
+  font-size: 1.5em;
+}
+
+.washer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+
+.washer img{
+  width: 25vw;
+  height: 30vh;
+}
+
+.rate-button {
+  width: 25vw;
+  margin: 10px 0;
+}
+
+.form-container {
+  text-align: center;
+  background-color: white;
+  padding: 10px;
+}
+
+.form-container form {
+  margin-top: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input,
+.textarea {
+  padding: 5px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border-radius: 4px;
+}
+
+.button-container button[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+}
+
+.button-container {
+  text-align: center;
+}

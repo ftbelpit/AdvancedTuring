@@ -1,0 +1,35 @@
+#washerForm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  width: 35%;
+  margin: 0 auto;
+  border-radius: 10px;
+  padding-bottom: 10px;
+}
+
+.data-card label {
+  padding-top: 15px;
+
+}
+
+.data-card input {
+  border-radius: 10px;
+  width: 100%;
+  padding: 5px;
+}
+
+.data-card-ano label {
+  padding-top: 15px;
+}
+
+.data-card-ano input {
+  border-radius: 10px;
+  width: 100%;
+  padding: 5px;
+}
+
+.add-button {
+  margin-top: 20px;
+}

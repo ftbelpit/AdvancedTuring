@@ -1,0 +1,62 @@
+.wash-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 70%;
+}
+
+.wash-card {
+  padding: 25px;
+  display: grid;
+  grid-template-columns: 2.5fr 1fr 2fr;
+  background-color: #ffffff;
+  margin-bottom: 16px;
+  position: relative;
+  border-radius: 10px;
+}
+
+.wash-card p {
+  font-weight: bold;
+  padding-top: 3px;
+}
+
+.wash-info {
+  display: flex;
+  justify-content: center;
+  text-transform: capitalize;
+  flex-direction: column;
+}
+
+.wash-car{
+  display: flex;
+  justify-content: center;
+  text-transform: capitalize;
+  flex-direction: column;
+
+}
+
+.wash-price {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #DCFCFE;
+  padding: 8px 17px 6px 8px;
+  border-top-right-radius: 10px;
+  font-weight: 700;
+}
+
+.wash-date {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 5px;
+}
+
+.buttons .delete-button{
+  width: 140px;
+}
+
+.wash-price-date {
+  display: flex;
+  
+}

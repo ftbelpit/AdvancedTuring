@@ -1,0 +1,22 @@
+#profile {
+  width: 50%;
+  margin: 0 auto;
+  display:flex;
+  flex-direction: column;
+  padding-bottom: 40px;
+  text-transform: capitalize;
+}
+
+.profile-cars{
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  font-size: 0.97em;
+  background-color: white;
+  border-radius: 10px;
+}
+
+span {
+  font-weight: bold;
+}
