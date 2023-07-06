@@ -15,22 +15,6 @@
   font-size: 0.97em;
   background-color: white;
   border-radius: 10px;
-}
-
-.delete-button {
-  border-radius: 10px;
-  background-color: #FF9B9B;
-  border: none;
-  width: 125px;
-  height: 30px;
-  padding-top: 5px;
-  margin-top: 40px;
-}
-
-.buttons {
-  display: flex;
-  flex-direction: column;
-}
-span {
-  font-weight: bold;
+  border: 1px solid #000;
+  box-shadow: 0 2px 8px rgb(0, 0, 0);
 }

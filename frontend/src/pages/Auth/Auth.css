@@ -5,6 +5,7 @@
   padding: 1.5em 2em;
   max-width: 33%;
   margin: 2em auto;
+  box-shadow: 0 2px 8px rgb(0, 0, 0);
 }
 
 #login h2,
@@ -54,4 +55,10 @@
 
 form input[type="submit"] {
   padding: 10px 8px;
+  box-shadow: 0 2px 8px rgb(0, 0, 0);
+}
+
+#login form input,
+#register form input {
+  padding: 10px;
 }

@@ -33,6 +33,9 @@ const AddWash = () => {
     message: messageWash,
     error: errorWash
   } = useSelector((state) => state.wash)
+
+  const { cars } = useSelector((state) => state.car)
+  const { washers } = useSelector((state) => state.washer)
  
   const [fabricante, setFabricante] = useState(fabricanteParam || "");
   const [modelo, setModelo] = useState(modeloParam || "");
@@ -80,45 +83,73 @@ const AddWash = () => {
     }
   }, [messageWash, navigate, userAuth._id]);
 
+
+   
+   
    
   if (loading) {
     return <p>Carregando...</p>;
   }
 
   return (
-    <div className="data-car">
+    <div className="add-wash">
       <div className="profile-title">
         <h2>Adicionar lavagem</h2>
       </div>
       {id === userAuth._id && (
         <>
           <div ref={newWashForm}>
-            <form id="carForm" onSubmit={submitHandle}>
-              <div className="data-card">
+            <form id="add-washForm" onSubmit={submitHandle}>
+              <div className="add-wash-card">
                 <label>Fabricante</label>
-                <input
-                  type="text"
-                  onChange={(e) => setFabricante(e.target.value)}
+                <select onChange={(e) => {setFabricante(e.target.value)}}
                   value={fabricante || ""}
-                />
+                >
+                  <option value="">Escolha o fabricante do carro</option>
+                  {cars.map((car) => (
+                    <option 
+                      key={car._id} 
+                      value={car.fabricante}
+                    >
+                      {car.fabricante}
+                    </option>
+                  ))}
+                </select>
               </div>
-              <div className="data-card">
+              <div className="add-wash-card">
                 <label>Modelo</label>
-                <input
-                  type="text"
+                <select
                   onChange={(e) => setModelo(e.target.value)}
                   value={modelo || ""}
-                />
+                >
+                  <option>Escolha o modelo do carro</option>
+                  {cars.map((car) => (
+                    <option 
+                      key={car._id} 
+                      value={car.modelo}
+                    >
+                      {car.modelo}
+                    </option>
+                  ))}
+                </select>
               </div>
-              <div className="data-card">
+              <div className="add-wash-card">
                 <label>Lavador</label>
-                <input
-                  type="text"
-                  onChange={(e) => setName(e.target.value)}
-                  value={name || ""}
-                />
+                <select
+                  onChange={(e) => setName(e.target.value)} value={name || ""}
+                >
+                  <option>Escolha o lavador</option>
+                  {washers.map((washer) => (
+                    <option 
+                      key={washer._id} 
+                      value={washer.name}
+                    >
+                      {washer.name}
+                    </option>
+                  ))}
+                </select>
               </div>
-              <div className="data-card">
+              <div className="add-wash-card">
                 <label>Data</label>
                 <input
                   type="date"
@@ -127,10 +158,10 @@ const AddWash = () => {
                 />
               </div>
               <div className="add-button">
-              {!loadingWash && <input type="submit" value="Agendar" />}
-              {loadingWash && (
-                <input type="submit" disabled value="Aguarde..." />              
-              )}
+                {!loadingWash && <input type="submit" value="Agendar" />}
+                {loadingWash && (
+                  <input type="submit" disabled value="Aguarde..." />              
+                )}
               </div>
             </form>
           </div>

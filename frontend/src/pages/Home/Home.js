@@ -160,8 +160,8 @@ const Home = () => {
       </div>
       {showPopup && (
         <>
-          <div className="overlay"></div>
-          <div className="popup">
+          <div className="overlay-home"></div>
+          <div className="popup-home">
             <p>Por favor, selecione um carro antes de escolher o lavador.</p>
             <button onClick={closePopup}>Fechar</button>
           </div>
@@ -193,11 +193,11 @@ const Home = () => {
               </div>
               <div className="home-assets-buttons">
                 <Link to={`/assessments/${washer._id}`}>
-                  <button className="btn button-assessment">Ver avaliações</button>
+                  <button className="button-assessment">Ver avaliações</button>
                 </Link>
                 <button
                   type="submit"
-                  className="btn button-wash"
+                  className="button-wash"
                   onClick={() => handleWashButtonClick(washer.name)}
                 >
                   Lavar meu carro

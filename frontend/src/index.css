@@ -4,18 +4,17 @@ body {
   padding: 0;
   box-sizing: border-box;
   background-color: #EAF7FF;
-  color: #000000;
+  color: #000;
 }
 
 input,
 textarea,
 button {
   font-family: "Roboto", sans-serif;
-
 }
 
 a {
-  color: #000000;
+  color: #000;
   text-decoration: none;
 }
 
@@ -41,17 +40,15 @@ label {
 label span {
   font-weight: bold;
   margin-bottom: .5em;
-  color: #000000;
+  color: #000;
   font-size: .7em;
 }
 
-input {
+input,
+textarea {
   background-color: #8FF2FF;
-  color: #000000;
-  border: 1px solid #555;
-  border-radius: 2px;
-  padding: 10px 8px;
-  outline: none;
+  color: #000;
+  border: 1px solid #000;
   margin-bottom: .6em;
 }
 
@@ -64,13 +61,14 @@ input::placeholder {
 button, 
 input[type="submit"] {
   background-color: #8FF2FF;
-  color: #000000;
-  border: 1px solid #000000;
+  color: #000;
   border-radius: 4px;
   padding: 8px 8px;
   font-weight: bold;
   cursor: pointer;
   font-size: 1em;
+  border: 1px solid #000;
+  box-shadow: 0 2px 8px rgb(0, 0, 0);
 }
 
 input[type="submit"] {
@@ -84,7 +82,7 @@ input:disabled {
 
 button:hover,
 input[type="submit"]:hover {
-  background-color: #000000;
+  background-color: #000;
   color: #8FF2FF;
   border: 1px solid #8FF2FF;
 }
@@ -106,15 +104,17 @@ div .delete-button {
   height: 30px;
   margin-top: 40px;
   margin-right: 5px;
+  padding: 2px;
 }
 
 div .delete-button:hover {
   color: #FF9B9B;
-  background-color: black;
+  background-color: #000;
   border: 1px solid #FF9B9B;
-  padding: 0;
 }
 
-.add-button {
-  text-align: center;
+select:focus {
+  box-shadow: 0 0 0 0;
+  border: 0 none;
+  outline: 0;
 }

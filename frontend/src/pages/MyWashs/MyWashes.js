@@ -88,7 +88,7 @@ const MyWashes = () => {
                       >
                         Desmarcar lavagem
                       </button>
-                      {dataFormatada}
+                       {dataFormatada}
                     </>
                   )}
               </span>    

@@ -49,12 +49,12 @@ const MyCars = () => {
   }
 
   return (
-    <div id="profile">
+    <div id="my-cars">
       <div className="profile-title">
         <h2>Meus Carros</h2>
       </div>
       {cars && cars.length > 0 && cars.map((car) => (
-        <div className="profile-cars" key={car._id}> 
+        <div className="card-cars" key={car._id}> 
           <div>
             <span className="fabricante">{car.fabricante} </span> 
             <span className="modelo">{car.modelo}</span>

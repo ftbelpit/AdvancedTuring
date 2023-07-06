@@ -101,7 +101,7 @@ const AddCar = () => {
                   value={modelo || ""}
                 />
               </div>
-              <div className="data-card-ano">
+              <div className="data-card">
                 <label>Ano</label>
                 <input
                   type="text"

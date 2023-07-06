@@ -1,108 +1,119 @@
-import "./Navbar.css"
-
-// Assets
-import logo from "../assets/turingwash-logo.svg"
-
-// Components 
-import {NavLink, Link} from "react-router-dom"
-
-// Hooks
-// import { useState } from "react"
-import { useAuth } from "../hooks/useAuth"
-import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
-
-// Redux
-import { logout, reset } from "../slices/authSlice"
-import { logoutAdmin, resetAdmin } from "../slices/adminAuthSlice"
-import { useAuthAdmin } from "../hooks/useAuthAdmin"
-
+import "./Navbar.css";
+import { NavLink, Link } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logout, reset } from "../slices/authSlice";
+import { logoutAdmin, resetAdmin } from "../slices/adminAuthSlice";
+import { useAuthAdmin } from "../hooks/useAuthAdmin";
+import logo from "../assets/turingwash-logo.svg";
 
 const Navbar = () => {
   const { auth } = useAuth();
   const { authAdmin } = useAuthAdmin();
   const { user: userAuth } = useSelector((state) => state.auth);
-  // const { adminAuth } = useSelector((state) => state.authAdmin);
-
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
   const handleLogout = () => {
     dispatch(logout());
     dispatch(reset());
-
     navigate("/login");
   };
 
   const handleLogoutAdmin = () => {
     dispatch(logoutAdmin());
     dispatch(resetAdmin());
-
     navigate("/login");
   };
 
+  const isMeusCarrosPage = window.location.pathname.includes("/cars/");
+  const isMinhasLavagensPage = window.location.pathname.includes("/washes/");
+  const isAgendarLavagemPage = window.location.pathname.includes("/addwash/");
+  const isAvaliarLavadorPage = window.location.pathname.includes("/assessments/");
+
+
   return (
     <nav id="nav">
-        {authAdmin ? (
-          <>
-            <Link to="/home_admin">
+      {authAdmin ? (
+        <>
+          <Link to="/home_admin">
+            {isMeusCarrosPage || isMinhasLavagensPage || isAgendarLavagemPage || isAvaliarLavadorPage ? (
+              <span>Início</span>
+            ) : (
               <img src={logo} alt="Turing Wash" className="logo" />
-            </Link>
-            <ul id="nav-links">
-              <li>
-                <NavLink to="/myusers">
-                  <span>Meus usuários</span>
-                </NavLink>
-              </li>
-              <li>
-                <span className="exit" onClick={handleLogoutAdmin}>Sair</span>
-              </li>
-            </ul>
-          </>
-        ) : (
-          <>
-            {auth && (
-              <>
-                <Link to={`/${userAuth?._id ?? ""}`}>
+            )}
+          </Link>
+          <ul id="nav-links">
+            <li>
+              <NavLink to="/myusers">
+                <span>Meus usuários</span>
+              </NavLink>
+            </li>
+            <li>
+              <span className="exit" onClick={handleLogoutAdmin}>
+                Sair
+              </span>
+            </li>
+          </ul>
+        </>
+      ) : (
+        <>
+          {auth && (
+            <>
+              <Link to={`/${userAuth?._id ?? ""}`}>
+                {isMeusCarrosPage || isMinhasLavagensPage || isAgendarLavagemPage || isAvaliarLavadorPage ? (
+                  <span>Início</span>
+                ) : (
                   <img src={logo} alt="Turing Wash" className="logo" />
-                </Link>
-                <ul id="nav-links">
-                  {userAuth && (
-                    <li>
-                      <NavLink to={`/cars/${userAuth._id}`}>
-                        <span>Meus carros</span>
-                      </NavLink>
-                    </li>
-                  )}
-                  {userAuth && (
-                    <li>
-                      <NavLink to={`/washes/${userAuth._id}`}>
-                        <span>Minhas lavagens</span>
-                      </NavLink>
-                    </li>
-                  )}
+                )}
+              </Link>
+              <ul id="nav-links">
+                {userAuth && (
                   <li>
-                    <span className="exit" onClick={handleLogout}>Sair</span>
+                    <NavLink to={`/cars/${userAuth._id}`}>
+                      <span>Meus carros</span>
+                    </NavLink>
                   </li>
-                </ul>
-              </>
-            )}   
-            {!auth && !authAdmin && (
-              <>
+                )}
+                {userAuth && (
+                  <li>
+                    <NavLink to={`/washes/${userAuth._id}`}>
+                      <span>Minhas lavagens</span>
+                    </NavLink>
+                  </li>
+                )}
+                <li>
+                  <span className="exit" onClick={handleLogout}>
+                    Sair
+                  </span>
+                </li>
+              </ul>
+            </>
+          )}
+          {!auth && !authAdmin && (
+            <>
+              {isMeusCarrosPage || isMinhasLavagensPage || isAgendarLavagemPage || isAvaliarLavadorPage ? (
+                <span>Início</span>
+              ) : (
                 <img src={logo} alt="Turing Wash" className="logo" />
-                <ul id="nav-links">
-                  <li>
-                    <NavLink to="/login">Entrar</NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/register">Cadastrar</NavLink>
-                  </li>
-                </ul>
-              </>
-            )}        
-          </>
-        )}
+              )}
+              <ul id="nav-links">
+                <li>
+                  <NavLink to="/login">
+                    <span>Entrar</span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/register">
+                    <span>Cadastrar</span>
+                  </NavLink>
+                </li>
+              </ul>
+            </>
+          )}
+        </>
+      )}
     </nav>
   );
 };
