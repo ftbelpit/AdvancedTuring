@@ -87,7 +87,7 @@ export const getWash = createAsyncThunk(
 export const getWashes = createAsyncThunk(
   "wash/getall", 
   async(_, thunkAPI) => {
-    const token = thunkAPI.getState().auth.user.token
+    const token = thunkAPI.getState().authAdmin.admin.token_admin
 
     const data = await washService.getWashes(token)
 

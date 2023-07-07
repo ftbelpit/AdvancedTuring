@@ -51,6 +51,11 @@ const Navbar = () => {
               </NavLink>
             </li>
             <li>
+              <NavLink to="/allwashes">
+                <span>Todas as lavagens</span>
+              </NavLink>
+            </li>
+            <li>
               <span className="exit" onClick={handleLogoutAdmin}>
                 Sair
               </span>

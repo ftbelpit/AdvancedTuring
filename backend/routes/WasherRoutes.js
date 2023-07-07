@@ -7,7 +7,8 @@ const {
   deleteWasher, 
   getAllWashers, 
   getWasherById, 
-  assessmentWasher
+  assessmentWasher,
+  timesWasher
 } = require("../controllers/WasherController")
 
 // Middlewares
@@ -30,5 +31,6 @@ router.delete("/:id", authGuardAdmin, deleteWasher)
 router.get("/", getAllWashers)
 router.get("/:id", getWasherById)
 router.put("/assessments/:id", authGuard, commentValidation(), validate, assessmentWasher)
+router.put("/times/:id", authGuardAdmin, validate, timesWasher)
 
 module.exports = router

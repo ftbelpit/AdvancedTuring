@@ -16,7 +16,7 @@
 }
 
 .add-wash-card select {
-  width: 200px;
+  width: 210px;
   border-radius: 10px;
   padding: 5px;
   background-color: #8FF2FF;
@@ -26,10 +26,11 @@
 }
 
 .add-wash-card input {
-  width: 190px;
+  width: 200px;
   border-radius: 10px;
   padding: 5px;
   background-color: #8FF2FF;
   color: #000;
   border: 1px solid #000;
+  text-transform: uppercase;
 }

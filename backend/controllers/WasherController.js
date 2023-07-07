@@ -126,10 +126,37 @@ const assessmentWasher = async (req, res) => {
   });
 };
 
+// Add available times to washer
+const timesWasher = async (req, res) => {
+  const { id } = req.params;
+  const { times } = req.body;
+
+  try {
+    const washer = await Washer.findById(id);
+
+    if (!washer) {
+      res.status(404).json({ errors: ["Lavador não encontrado"] });
+      return;
+    }
+
+    washer.timesWasher = times;
+
+    await washer.save();
+
+    res.status(200).json({
+      times,
+      message: "Horários disponíveis foram adicionados com sucesso!",
+    });
+  } catch (error) {
+    res.status(500).json({ errors: ["Ocorreu um erro ao adicionar os horários disponíveis"] });
+  }
+};
+
 module.exports = {
   insertWasher,
   deleteWasher,
   getAllWashers,
   getWasherById,
   assessmentWasher,
-}
+  timesWasher,
+};

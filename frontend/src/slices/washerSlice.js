@@ -51,20 +51,22 @@ export const getWashers = createAsyncThunk(
     return data 
 })
 
-// add assessment to a washer
 export const assessments = createAsyncThunk(
   "washer/assessments",
   async(assessmentData, thunkAPI) => {
-    const token = thunkAPI.getState().auth.user.token
+    const { score, assessment, userName, userId } = assessmentData;
+    const token = thunkAPI.getState().auth.user.token;
 
     const data = await washerService.assessments(
       { 
-        score: assessmentData.score,
-        assessment: assessmentData.assessment 
+        score,
+        assessment,
+        userName,
+        userId
       }, 
       assessmentData.id, 
       token
-    )
+    );
 
     // Check for errors
     if(data.errors) {
@@ -128,17 +130,21 @@ export const washerSlice = createSlice({
       state.washer = {}
     })
     .addCase(assessments.fulfilled, (state, action) => {
-      state.loading = false
-      state.success = true
-      state.error = null
+      state.loading = false;
+      state.success = true;
+      state.error = null;
     
-      state.washer.assessments.push(
-        action.payload.score,
-        action.payload.assessment
-      );
+      const { score, assessment, userName, userId } = action.payload.assessment;
+    
+      state.washer.assessments.push({
+        score,
+        assessment,
+        userName,
+        userId,
+      });
     
       state.message = action.payload.message;
-    })    
+    })
     .addCase(assessments.rejected, (state, action) => {
       state.loading = false
       state.error = action.payload

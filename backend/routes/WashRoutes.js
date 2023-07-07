@@ -15,11 +15,12 @@ const {
 const { washInsertValidation } = require("../middlewares/washValidation")
 const authGuard = require("../middlewares/authGuard")
 const validate = require ("../middlewares/handleValidation")
+const authGuardAdmin = require("../middlewares/authGuardAdmin")
 
 // Routes 
 router.post("/", authGuard, washInsertValidation(), validate, insertWash)
 router.delete("/:id", authGuard, deleteWash)
-router.get("/", authGuard, getAllWashes)
+router.get("/", authGuardAdmin, getAllWashes)
 router.get("/user/:id", authGuard, getUserWashes)
 router.get("/washer/:id", getWasherWashes)
 router.get("/:id", authGuard, getWashById)

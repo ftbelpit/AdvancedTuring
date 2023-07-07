@@ -26,6 +26,7 @@ import Washer from './pages/Washer/Washer';
 import UserCars from './pages/UsersCars/UserCars';
 import AddWash from './pages/AddWash/AddWash';
 import Assessments from './pages/Assessments/Assessments';
+import AllWashes from './pages/AllWashes/AllWashes';
 
 function App() {
   const {auth, loading} = useAuth()
@@ -47,6 +48,7 @@ function App() {
           <Route path="/myusers" element={authAdmin ? <MyUsers /> : <Navigate to="/login_admin" />}/>
           <Route path="/washers" element={authAdmin ? <Washer /> : <Navigate to="/login_admin" />} />
           <Route path="/usercars/:id" element={authAdmin ? <UserCars /> : <Navigate to ="/login_admin" />} />
+          <Route path="/allwashes" element={authAdmin ? <AllWashes /> : <Navigate to="/login_admin" />}/>
           {!auth && !authAdmin ? (
           <Route path="/" element={<Navigate to="/login" />} />
           ) : (

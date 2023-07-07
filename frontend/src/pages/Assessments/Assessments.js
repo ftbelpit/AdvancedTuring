@@ -51,6 +51,7 @@ const Assessments = () => {
   const resetComponentMessage = () => {
     setTimeout(() => {
       dispatch(resetMessage());
+      setShowPopup(false);
     }, 2000);
   };
 

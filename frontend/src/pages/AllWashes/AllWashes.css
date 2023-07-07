@@ -1,0 +1,77 @@
+.washes-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 70%;
+}
+
+.washes-card {
+  padding: 25px;
+  display: grid;
+  grid-template-columns: 2.5fr 1fr 2fr;
+  background-color: #fff;
+  margin-bottom: 16px;
+  position: relative;
+  border-radius: 10px;
+  border: 1px solid #000;
+  box-shadow: 0 2px 8px rgb(0, 0, 0);
+}
+
+.washes-card p {
+  font-weight: bold;
+  padding-top: 3px;
+}
+
+.washes-info {
+  display: flex;
+  justify-content: center;
+  text-transform: capitalize;
+  flex-direction: column;
+}
+
+.washes-car{
+  display: flex;
+  justify-content: center;
+  text-transform: capitalize;
+  flex-direction: column;
+}
+
+.washes-price {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #BCF7FF;
+  padding: 8px 17px 6px 8px;
+  border-top-right-radius: 10px;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgb(0, 0, 0);
+}
+
+.washes-date {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 5px;
+}
+
+.washes-price-date {
+  display: flex;
+}
+
+.washes-mark {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 130px;
+}
+
+.washes-details {
+  display: flex;
+}
+
+.washes-price-date .success,
+.washes-price-date .failed {
+  width: 165px;
+  border-radius: 10px;
+}

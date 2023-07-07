@@ -100,22 +100,22 @@ const AddWash = () => {
         <>
           <div ref={newWashForm}>
             <form id="add-washForm" onSubmit={submitHandle}>
-              <div className="add-wash-card">
-                <label>Fabricante</label>
-                <select onChange={(e) => {setFabricante(e.target.value)}}
-                  value={fabricante || ""}
-                >
-                  <option value="">Escolha o fabricante do carro</option>
-                  {cars.map((car) => (
-                    <option 
-                      key={car._id} 
-                      value={car.fabricante}
-                    >
-                      {car.fabricante}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div className="add-wash-card">
+              <label>Fabricante</label>
+              <select onChange={(e) => {setFabricante(e.target.value)}}
+                value={fabricante || ""}
+              >
+                <option value="">Escolha o fabricante do carro</option>
+                {cars.map((car) => (
+                  <option 
+                    key={car._id} 
+                    value={car.fabricante}
+                  >
+                    {car.fabricante.charAt(0).toUpperCase() + car.fabricante.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
               <div className="add-wash-card">
                 <label>Modelo</label>
                 <select
@@ -128,7 +128,7 @@ const AddWash = () => {
                       key={car._id} 
                       value={car.modelo}
                     >
-                      {car.modelo}
+                      {car.modelo.charAt(0).toUpperCase() + car.modelo.slice(1)}
                     </option>
                   ))}
                 </select>
@@ -144,7 +144,7 @@ const AddWash = () => {
                       key={washer._id} 
                       value={washer.name}
                     >
-                      {washer.name}
+                      {washer.name.charAt(0).toUpperCase() + washer.name.slice(1)}
                     </option>
                   ))}
                 </select>

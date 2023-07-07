@@ -9,11 +9,13 @@ const washerSchema = new Schema(
     price: Number,
     adminId: mongoose.ObjectId,
     adminName: String,
+    timesWasher: [String]
   },
   {
     timestamps: true,
   }
 );
+
 
 const Washer = mongoose.model("Washer", washerSchema);
 
