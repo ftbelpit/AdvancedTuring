@@ -61,4 +61,5 @@ form input[type="submit"] {
 #login form input,
 #register form input {
   padding: 10px;
+  border-radius: 5px;
 }

@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 
 // Inserir uma lavagem associada a um carro existente
 const insertWash = async (req, res) => {
-  const { fabricante, modelo, name, date } = req.body;
+  const { fabricante, modelo, name, day, hour } = req.body;
 
   const reqUser = req.user;
 
@@ -45,7 +45,8 @@ const insertWash = async (req, res) => {
       userId: user._id,
       userName: user.name,
       washerPrice: washer.price,
-      date
+      day,
+      hour
     });
 
     // Se a lavagem for criada com sucesso, retorna os dados
@@ -72,7 +73,7 @@ const deleteWash = async(req, res) => {
       return
     }
 
-    // Check if car belongs to user
+    // Check if wash belongs to user
     if(!wash.userId.equals(reqUser._id)) {
       return res
         .status(422)

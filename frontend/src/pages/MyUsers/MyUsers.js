@@ -30,7 +30,7 @@ const MyUsers = () => {
               <p>{user.email}</p>
             </div>
             <div className="see-cars">
-              <Link to={`/usercars/${user._id}`}>
+              <Link to={`/userscars/${user._id}`}>
                 <button>Ver carros</button>
               </Link>
             </div>

@@ -14,7 +14,8 @@ import { getWashers } from "../../slices/washerSlice"
 const HomeAdmin = () => {
   const dispatch = useDispatch()
 
-  const { washers, loading } = useSelector((state) => state.washer)
+  const { washers } = useSelector((state) => state.washer)
+  const { loading } = useSelector((state) => state.admin)
 
   // load all washers
   useEffect(() => {
@@ -57,15 +58,18 @@ const HomeAdmin = () => {
               <div className="home-assets-buttons">
                 <Link to={`/assessments/${washer._id}`}>
                   <button className="button-assessment">Ver avaliações</button>
-                </Link>               
+                </Link>    
+                <Link to={`/times/${washer._id}`}>
+                  <button className="button-assessment">Ver horários</button>
+                </Link>           
               </div>
             </div>
           </div>
         );
       })}
       <div>
-        <Link to="/washers">
-          <button>Cadastrar lavador</button>
+        <Link to="/addwasher">
+          <button className="add-button">Cadastrar lavador</button>
         </Link>
       </div>
     </div>

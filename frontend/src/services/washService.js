@@ -46,19 +46,20 @@ const getWasherWashes = async(id) => {
 }
 
 // Delete a wash
-const deleteWash = async(id, token) => {
-  const config = requestConfig("DELETE", null, token)
+const deleteWash = async (id, token, token_admin) => {
+  const config = requestConfig("DELETE", null, token || token_admin);
 
   try {
     const res = await fetch(api + "/washes/" + id, config)
       .then((res) => res.json())
-      .catch((err) => err)
+      .catch((err) => err);
 
-    return res
+    return res;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
+
 
 // get a wash by id
 const getWash = async (id, token) => {

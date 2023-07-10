@@ -1,5 +1,5 @@
 import "./Navbar.css";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -31,22 +31,23 @@ const Navbar = () => {
   const isMinhasLavagensPage = window.location.pathname.includes("/washes/");
   const isAgendarLavagemPage = window.location.pathname.includes("/addwash/");
   const isAvaliarLavadorPage = window.location.pathname.includes("/assessments/");
-
+  const isMeusUsuariosPage = window.location.pathname.includes("/users");  
+  const isTodasAsLavagensPage = window.location.pathname.includes("/allwashes");  
 
   return (
     <nav id="nav">
       {authAdmin ? (
         <>
-          <Link to="/home_admin">
-            {isMeusCarrosPage || isMinhasLavagensPage || isAgendarLavagemPage || isAvaliarLavadorPage ? (
+          <NavLink to="/home_admin">
+            {isMeusUsuariosPage || isTodasAsLavagensPage ? (
               <span>Início</span>
             ) : (
               <img src={logo} alt="Turing Wash" className="logo" />
             )}
-          </Link>
+          </NavLink>
           <ul id="nav-links">
             <li>
-              <NavLink to="/myusers">
+              <NavLink to="/users">
                 <span>Meus usuários</span>
               </NavLink>
             </li>
@@ -66,13 +67,13 @@ const Navbar = () => {
         <>
           {auth && (
             <>
-              <Link to={`/${userAuth?._id ?? ""}`}>
+              <NavLink to={`/${userAuth?._id ?? ""}`}>
                 {isMeusCarrosPage || isMinhasLavagensPage || isAgendarLavagemPage || isAvaliarLavadorPage ? (
                   <span>Início</span>
                 ) : (
                   <img src={logo} alt="Turing Wash" className="logo" />
                 )}
-              </Link>
+              </NavLink>
               <ul id="nav-links">
                 {userAuth && (
                   <li>

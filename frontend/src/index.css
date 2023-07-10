@@ -118,3 +118,8 @@ select:focus {
   border: 0 none;
   outline: 0;
 }
+
+.add-button {
+  margin-top: 20px;
+  text-align: center;
+}

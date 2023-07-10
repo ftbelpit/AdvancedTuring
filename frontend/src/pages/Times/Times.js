@@ -1,21 +1,21 @@
-import "./Assessments.css";
+import "./Times.css";
 
 import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getWasher, resetMessage, assessments } from "../../slices/washerSlice";
+import { getWasher, resetMessage, times } from "../../slices/washerSlice";
 import { useParams } from "react-router-dom";
 
 import WasherItem from "../../components/WasherItem";
 import Message from "../../components/Message";
 
-const Assessments = () => {
+const Times = () => {
   const { id } = useParams();
 
   const dispatch = useDispatch();
 
-  const {user} = useSelector((state) => state.auth)
+  const {admin} = useSelector((state) => state.authAdmin)
 
-  const { loading } = useSelector((state) => state.user);
+  const { loading } = useSelector((state) => state.admin);
 
   const {
     washer,
@@ -25,8 +25,8 @@ const Assessments = () => {
   } = useSelector((state) => state.washer);
 
   const [showPopup, setShowPopup] = useState(false);
-  const [score, setScore] = useState("")
-  const [assessment, setAssessment] = useState("")
+  const [days, setDays] = useState("")
+  const [hours, setHours] = useState("")
 
   const popupRef = useRef(null);
 
@@ -55,19 +55,19 @@ const Assessments = () => {
     }, 2000);
   };
 
-  const handleAssessment = (e) => {
+  const handleTime = (e) => {
     e.preventDefault();
 
-    const assessmentData = {
-      score: score,
-      assessment: assessment,
+    const timeData = {
+      days: days,
+      hours: hours,
       id: washer._id,
     };
 
-    dispatch(assessments(assessmentData));
+    dispatch(times(timeData));
 
-    setScore("")
-    setAssessment("")
+    setDays("")
+    setHours("")
 
     resetComponentMessage();
   };
@@ -82,49 +82,47 @@ const Assessments = () => {
   }
 
   return (
-    <div id="assessments">
-      <h2 className="profile-title">Avaliações do Lavador</h2>
-      <div className="washer">
+    <div id="times">
+      <h2 className="profile-title">Horários do lavador</h2>
+      <div className="washer-times">
         <WasherItem washer={washer} />
-        {user && !showPopup && (
-          <button className="rate-button" onClick={handleRateButtonClick}>
-            Avaliar
+        {admin && !showPopup && (
+          <button className="add-button" onClick={handleRateButtonClick}>
+            Adicionar horários
           </button>
         )}
       </div>
       <div>
-        {washer.assessments && (
+        {washer.times && (
           <>
             {showPopup && (
               <div
-                className="overlay"
+                className="overlay-times"
                 onClick={(e) => {
                   if (popupRef.current && !popupRef.current.contains(e.target)) {
                     setShowPopup(false);
                   }
                 }}
               >
-                <div className="popup" ref={popupRef}>
-                  <div className="popup-content">
-                    <h2>Avaliar Lavador</h2>
-                    <form onSubmit={handleAssessment}>
-                      <label>Nota (0 a 5):</label>
+                <div className="popup-times" ref={popupRef}>
+                  <div className="popup-content-times">
+                    <h2>Adicionar Horários</h2>
+                    <form onSubmit={handleTime}>
+                      <label>Dias:</label>
                       <input
-                        className="input"
                         type="text"
-                        placeholder="Insira a sua nota" 
-                        onChange={(e) => setScore(e.target.value)} 
-                        value={score || ""}
+                        placeholder="Insira os dias" 
+                        onChange={(e) => setDays(e.target.value)} 
+                        value={days || ""}
                       />
-                      <label>Avaliação:</label>
-                      <textarea
-                        className="textarea"
-                        maxLength={200}
-                        placeholder="Insira a sua avaliação" 
-                        onChange={(e) => setAssessment(e.target.value)} 
-                        value={assessment || ""}
+                      <label>Horários:</label>
+                      <input
+                        type="text"
+                        placeholder="Insira os horários" 
+                        onChange={(e) => setHours(e.target.value)} 
+                        value={hours || ""}
                       />
-                      <div className="button-container">
+                      <div className="button-container-times">
                         {!loadingWasher && <input type="submit" value="Enviar Avaliação" />}
                         {loadingWasher && <input type="submit" disabled value="Aguarde..." />}
                       </div>
@@ -135,15 +133,16 @@ const Assessments = () => {
                 </div>
               </div>
             )}
-            <h3>Avaliações: ({washer.assessments.length})</h3>
-            {washer.assessments.length === 0 && <p>Não há avaliações...</p>}
-            {washer.assessments.map(( assessment, index) => (
-              assessment && (
-                <div className="assessment-user" key={`${assessment._id}-${index}`}>
-                  <div className="assessment-info">
-                    <span className="name">Nome do usuário: {assessment.userName}</span>
-                    <span className="score">Nota: {assessment.score}</span>
-                    <span className="assessment">Avaliação: {assessment.assessment}</span>
+            <h3 className="horarios">Horários</h3>
+            {washer.times.length === 0 && <p>Não há horaŕios...</p>}
+            {washer.times.map(( time , index) => (
+              time && (
+                <div className="time-user" key={`${time._id}-${index}`}>
+                  <div className="time-days">
+                    <span className="days">Dias de trabalho: {time.days.join(' | ')}</span>
+                  </div>
+                  <div className="time-hours"> 
+                    <span className="hours">Horários disponíveis: {time.hours.join(' | ')}</span>
                   </div>
                 </div>
               )
@@ -155,4 +154,4 @@ const Assessments = () => {
   );
 };
 
-export default Assessments;
+export default Times;

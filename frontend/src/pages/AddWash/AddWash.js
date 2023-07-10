@@ -36,11 +36,12 @@ const AddWash = () => {
 
   const { cars } = useSelector((state) => state.car)
   const { washers } = useSelector((state) => state.washer)
- 
+    
   const [fabricante, setFabricante] = useState(fabricanteParam || "");
   const [modelo, setModelo] = useState(modeloParam || "");
   const [name, setName] = useState(washerName || "");
-  const [date, setDate] = useState("")
+  const [day, setDay] = useState("")
+  const [hour, setHour] = useState("")
 
   const newWashForm = useRef();
 
@@ -62,7 +63,8 @@ const AddWash = () => {
       fabricante,
       modelo,
       name,
-      date
+      day,
+      hour
     };
   
     dispatch(insertWash(washData));
@@ -70,7 +72,8 @@ const AddWash = () => {
     setFabricante("");
     setModelo("");
     setName("");
-    setDate("");
+    setDay("");
+    setHour("");
   
     resetComponentMessage();
   };
@@ -83,10 +86,6 @@ const AddWash = () => {
     }
   }, [messageWash, navigate, userAuth._id]);
 
-
-   
-   
-   
   if (loading) {
     return <p>Carregando...</p>;
   }
@@ -150,12 +149,36 @@ const AddWash = () => {
                 </select>
               </div>
               <div className="add-wash-card">
-                <label>Data</label>
-                <input
-                  type="date"
-                  onChange={(e) => setDate(e.target.value)}
-                  value={date || ""}
-                />
+                <label>Dia</label>
+                <select
+                  onChange={(e) => setDay(e.target.value)}
+                  value={day || ""}
+                >
+                  <option>Escolha o dia</option>
+                  {washers.map((washer) =>
+                    washer.times.map((time) => (
+                      <option key={washer._id} value={time.days}>
+                        {time.days}
+                      </option>
+                    ))
+                  )}
+                </select>
+              </div>
+              <div className="add-wash-card">
+                <label>Horário</label>
+                <select
+                  onChange={(e) => setHour(e.target.value)}
+                  value={hour || ""}
+                >
+                  <option>Escolha o horário</option>
+                  {washers.map((washer) =>
+                    washer.times.map((time) => (
+                      <option key={washer._id} value={time.hours}>
+                        {time.hours}
+                      </option>
+                    ))
+                  )}
+                </select>
               </div>
               <div className="add-button">
                 {!loadingWash && <input type="submit" value="Agendar" />}

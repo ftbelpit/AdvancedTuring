@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect  } from "react";
 
 // redux
-import { getWashes, getUserWashes } from "../../slices/washSlice";
+import { getWashes, getUserWashes, deleteWash } from "../../slices/washSlice";
 import { useParams } from "react-router-dom";
 import { getWashers } from "../../slices/washerSlice";
 
@@ -34,6 +34,10 @@ const AllWashes = () => {
     dispatch(getWashers())
     dispatch(getWashes())
   }, [dispatch, id]) 
+
+  const handleDelete = (id) => {
+    dispatch(deleteWash(id))
+  }
 
   if (loading) {
     return <p>Carregando...</p>
@@ -72,6 +76,7 @@ const AllWashes = () => {
               {/* <div className="washes-details"> */}
                 <span className="washes-price">R$ {wash.washerPrice}</span>
                 <span className="washes-date">{dataFormatada}</span>
+                <button onClick={() => handleDelete(wash._id)}>deletar</button>
               {/* </div> */}
             </div>
           </div>

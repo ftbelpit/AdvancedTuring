@@ -22,11 +22,12 @@ import AddCar from './pages/AddCar/AddCar';
 import MyWashes from './pages/MyWashs/MyWashes';
 import MyUsers from './pages/MyUsers/MyUsers';
 import HomeAdmin from './pages/Home/HomeAdmin';
-import Washer from './pages/Washer/Washer';
+import AddWasher from './pages/Washer/AddWasher';
 import UserCars from './pages/UsersCars/UserCars';
 import AddWash from './pages/AddWash/AddWash';
 import Assessments from './pages/Assessments/Assessments';
 import AllWashes from './pages/AllWashes/AllWashes';
+import Times from './pages/Times/Times';
 
 function App() {
   const {auth, loading} = useAuth()
@@ -45,10 +46,11 @@ function App() {
         <Routes>
           <Route path="/login_admin" element={authAdmin ? <Navigate to="/home_admin" /> : <LoginAdmin />} />
           <Route path="/home_admin" element={authAdmin ? <HomeAdmin /> : <Navigate to="/login_admin" />} />
-          <Route path="/myusers" element={authAdmin ? <MyUsers /> : <Navigate to="/login_admin" />}/>
-          <Route path="/washers" element={authAdmin ? <Washer /> : <Navigate to="/login_admin" />} />
-          <Route path="/usercars/:id" element={authAdmin ? <UserCars /> : <Navigate to ="/login_admin" />} />
+          <Route path="/users" element={authAdmin ? <MyUsers /> : <Navigate to="/login_admin" />}/>
+          <Route path="/addwasher" element={authAdmin ? <AddWasher /> : <Navigate to="/login_admin" />} />
+          <Route path="/userscars/:id" element={authAdmin ? <UserCars /> : <Navigate to ="/login_admin" />} />
           <Route path="/allwashes" element={authAdmin ? <AllWashes /> : <Navigate to="/login_admin" />}/>
+          <Route path="/times/:id" element={authAdmin ? <Times /> : <Navigate to="/login_admin" />} />
           {!auth && !authAdmin ? (
           <Route path="/" element={<Navigate to="/login" />} />
           ) : (

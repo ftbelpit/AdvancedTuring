@@ -38,7 +38,41 @@ const commentValidation = () => {
   ];
 };
 
+const daysValidation = () => {
+  return [
+    body("days")
+      .isArray({ min: 1 })
+      .withMessage("Os dias são obrigatórios e devem ser um array.")
+      .custom((value) => {
+        const validDays = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira"];
+        const invalidDays = value.filter((day) => !validDays.includes(day));
+        if (invalidDays.length > 0) {
+          throw new Error(`Dias inválidos: ${invalidDays.join(", ")}`);
+        }
+        return true;
+      })
+  ];
+};
+
+const hoursValidation = () => {
+  return [
+    body("hours")
+      .isArray({ min: 1 })
+      .withMessage("As horas são obrigatórias e devem ser um array.")
+      .custom((value) => {
+        const validHours = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
+        const invalidHours = value.filter((hour) => !validHours.includes(hour));
+        if (invalidHours.length > 0) {
+          throw new Error(`Horas inválidas: ${invalidHours.join(", ")}`);
+        }
+        return true;
+      })
+  ];
+};
+
 module.exports = {
   washerInsertValidation,
-  commentValidation
+  commentValidation,
+  daysValidation,
+  hoursValidation
 }

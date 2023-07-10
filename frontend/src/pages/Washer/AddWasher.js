@@ -1,10 +1,10 @@
-import "./Washer.css";
+import "./AddWasher.css";
 import Message from "../../components/Message";
 import { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { insertWasher, resetMessage } from "../../slices/washerSlice";
 
-const Washer = () => {
+const AddWasher = () => {
   const dispatch = useDispatch();
 
   const { loading } = useSelector((state) => state.admin);
@@ -95,4 +95,4 @@ const Washer = () => {
   );
 };
 
-export default Washer;
+export default AddWasher;

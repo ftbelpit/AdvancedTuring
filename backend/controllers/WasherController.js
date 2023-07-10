@@ -43,7 +43,7 @@ const deleteWasher = async(req, res) => {
 
     // Check if photo exists
     if(!washer) {
-      res.status(404).json({ errors: ["Foto não encontrada!"] })
+      res.status(404).json({ errors: ["Lavador não encontrado!"] })
       return
     }
 
@@ -127,29 +127,55 @@ const assessmentWasher = async (req, res) => {
 };
 
 // Add available times to washer
-const timesWasher = async (req, res) => {
+const daysWasher = async (req, res) => {
   const { id } = req.params;
-  const { times } = req.body;
+  const { days } = req.body;
 
-  try {
-    const washer = await Washer.findById(id);
+  const washer = await Washer.findById(id);
 
-    if (!washer) {
-      res.status(404).json({ errors: ["Lavador não encontrado"] });
-      return;
-    }
-
-    washer.timesWasher = times;
-
-    await washer.save();
-
-    res.status(200).json({
-      times,
-      message: "Horários disponíveis foram adicionados com sucesso!",
-    });
-  } catch (error) {
-    res.status(500).json({ errors: ["Ocorreu um erro ao adicionar os horários disponíveis"] });
+  if (!washer) {
+    res.status(404).json({ errors: ["Lavador não encontrado"] });
+    return;
   }
+
+  const daysTime = {
+    days
+  };
+
+  washer.days.push(daysTime);
+
+  await washer.save();
+
+  res.status(200).json({
+    day: daysTime,
+    message: "Dia foi adicionado com sucesso!",
+  });
+};
+
+// Add available times to washer
+const hoursWasher = async (req, res) => {
+  const { id } = req.params;
+  const { hours } = req.body;
+
+  const washer = await Washer.findById(id);
+
+  if (!washer) {
+    res.status(404).json({ errors: ["Lavador não encontrado"] });
+    return;
+  }
+
+  const hoursTime = {
+    hours
+  };
+
+  washer.hours.push(hoursTime);
+
+  await washer.save();
+
+  res.status(200).json({
+    hour: hoursTime,
+    message: "Horário foi adicionado com sucesso!",
+  });
 };
 
 module.exports = {
@@ -158,5 +184,6 @@ module.exports = {
   getAllWashers,
   getWasherById,
   assessmentWasher,
-  timesWasher,
+  daysWasher,
+  hoursWasher
 };

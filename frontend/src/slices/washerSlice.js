@@ -77,6 +77,30 @@ export const assessments = createAsyncThunk(
   }
 )
 
+export const times = createAsyncThunk(
+  "washer/times",
+  async(timeData, thunkAPI) => {
+    const { days, hours } = timeData;
+    const token = thunkAPI.getState().authAdmin.admin.token_admin;
+
+    const data = await washerService.times(
+      { 
+        days,
+        hours
+      }, 
+      timeData.id, 
+      token
+    );
+
+    // Check for errors
+    if(data.errors) {
+      return thunkAPI.rejectWithValue(data.errors[0])
+    }
+
+    return data
+  }
+)
+
 export const washerSlice = createSlice({
   name: "washer",
   initialState,
@@ -146,6 +170,24 @@ export const washerSlice = createSlice({
       state.message = action.payload.message;
     })
     .addCase(assessments.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.payload
+    })
+    .addCase(times.fulfilled, (state, action) => {
+      state.loading = false;
+      state.success = true;
+      state.error = null;
+    
+      const { days, hours } = action.payload.time;
+    
+      state.washer.times.push({
+        days,
+        hours
+      });
+    
+      state.message = action.payload.message;
+    })
+    .addCase(times.rejected, (state, action) => {
       state.loading = false
       state.error = action.payload
     })
