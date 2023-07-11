@@ -16,7 +16,10 @@ const washSchema = new Schema(
     userId: mongoose.ObjectId,
     userName: String,
     washerPrice: Number,
-    day: String,
+    date: {
+      type: Date,
+      default: Date.now,
+    },
     hour: String
   },
   {

@@ -126,10 +126,9 @@ const assessmentWasher = async (req, res) => {
   });
 };
 
-// Add available times to washer
-const daysWasher = async (req, res) => {
+const timesWasher = async (req, res) => {
   const { id } = req.params;
-  const { days } = req.body;
+  const { hour } = req.body;
 
   const washer = await Washer.findById(id);
 
@@ -138,43 +137,24 @@ const daysWasher = async (req, res) => {
     return;
   }
 
-  const daysTime = {
-    days
-  };
-
-  washer.days.push(daysTime);
-
-  await washer.save();
-
-  res.status(200).json({
-    day: daysTime,
-    message: "Dia foi adicionado com sucesso!",
-  });
-};
-
-// Add available times to washer
-const hoursWasher = async (req, res) => {
-  const { id } = req.params;
-  const { hours } = req.body;
-
-  const washer = await Washer.findById(id);
-
-  if (!washer) {
-    res.status(404).json({ errors: ["Lavador não encontrado"] });
+  // Verificar se o horário já existe na lista de horários do lavador
+  const existingHour = washer.times.find((time) => time.hour === hour);
+  if (existingHour) {
+    res.status(400).json({ errors: [`O horário ${hour} já existe na lista`] });
     return;
   }
 
-  const hoursTime = {
-    hours
+  const timesWork = {
+    hour
   };
 
-  washer.hours.push(hoursTime);
+  washer.times.push(timesWork);
 
   await washer.save();
 
   res.status(200).json({
-    hour: hoursTime,
-    message: "Horário foi adicionado com sucesso!",
+    time: timesWork,
+    message: "Horário adicionado com sucesso!",
   });
 };
 
@@ -184,6 +164,5 @@ module.exports = {
   getAllWashers,
   getWasherById,
   assessmentWasher,
-  daysWasher,
-  hoursWasher
+  timesWasher
 };

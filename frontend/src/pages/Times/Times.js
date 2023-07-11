@@ -139,10 +139,10 @@ const Times = () => {
               time && (
                 <div className="time-user" key={`${time._id}-${index}`}>
                   <div className="time-days">
-                    <span className="days">Dias de trabalho: {time.days.join(' | ')}</span>
+                    <span className="days">Dias de trabalho: {time.day}</span>
                   </div>
                   <div className="time-hours"> 
-                    <span className="hours">Horários disponíveis: {time.hours.join(' | ')}</span>
+                    <span className="hours">Horários disponíveis: {time.hour}</span>
                   </div>
                 </div>
               )

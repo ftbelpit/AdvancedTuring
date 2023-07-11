@@ -19,7 +19,7 @@ const authGuardAdmin = require("../middlewares/authGuardAdmin")
 
 // Routes 
 router.post("/", authGuard, washInsertValidation(), validate, insertWash)
-router.delete("/:id", authGuard, deleteWash)
+router.delete("/:id", deleteWash)
 router.get("/", authGuardAdmin, getAllWashes)
 router.get("/user/:id", authGuard, getUserWashes)
 router.get("/washer/:id", getWasherWashes)

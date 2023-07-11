@@ -9,8 +9,7 @@ const washerSchema = new Schema(
     price: Number,
     adminId: mongoose.ObjectId,
     adminName: String,
-    days: Array,
-    hours: Array
+    times: Array
   },
   {
     timestamps: true,

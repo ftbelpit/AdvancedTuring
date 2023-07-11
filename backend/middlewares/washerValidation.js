@@ -1,4 +1,5 @@
 const {body} = require("express-validator")
+const moment = require('moment');
 
 const washerInsertValidation = () => {
   return [ 
@@ -38,41 +39,32 @@ const commentValidation = () => {
   ];
 };
 
-const daysValidation = () => {
+const timesValidation = () => {
   return [
-    body("days")
-      .isArray({ min: 1 })
-      .withMessage("Os dias são obrigatórios e devem ser um array.")
+    body("hour")
       .custom((value) => {
-        const validDays = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira"];
-        const invalidDays = value.filter((day) => !validDays.includes(day));
-        if (invalidDays.length > 0) {
-          throw new Error(`Dias inválidos: ${invalidDays.join(", ")}`);
+        if (!Array.isArray(value)) {
+          value = [value]; // Transforma em um array caso não seja
         }
-        return true;
-      })
-  ];
-};
 
-const hoursValidation = () => {
-  return [
-    body("hours")
-      .isArray({ min: 1 })
-      .withMessage("As horas são obrigatórias e devem ser um array.")
-      .custom((value) => {
         const validHours = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
-        const invalidHours = value.filter((hour) => !validHours.includes(hour));
+
+        const invalidHours = value.filter((hour) => {
+          // Verifica se a hora não está no padrão estabelecido ou se está repetida
+          return !validHours.includes(hour) || value.indexOf(hour) !== value.lastIndexOf(hour);
+        });
+
         if (invalidHours.length > 0) {
           throw new Error(`Horas inválidas: ${invalidHours.join(", ")}`);
         }
         return true;
       })
+      .withMessage("As horas são obrigatórias, devem estar no padrão estabelecido e não podem ser repetidas.")
   ];
 };
 
 module.exports = {
   washerInsertValidation,
   commentValidation,
-  daysValidation,
-  hoursValidation
+  timesValidation,
 }

@@ -17,11 +17,11 @@ const washInsertValidation = () => {
       .withMessage("O nome do lavador é obrigatório.")
       .isLength({min: 2})
       .withMessage("O nome precisa ter no mínimo 2 caracteres."),
-    body("day")
-      .isString()
-      .withMessage("O dia é obrigatório")
+    body("date")
+      .isDate()
+      .withMessage("A data é obrigatória.")
       .isLength()
-      .withMessage("Insira o dia da lavagem."),
+      .withMessage("Insira a data da lavagem."),
     body("hour")
       .isString()
       .withMessage("O horário é obrigatório.")

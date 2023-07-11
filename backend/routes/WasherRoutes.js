@@ -8,12 +8,11 @@ const {
   getAllWashers, 
   getWasherById, 
   assessmentWasher,
-  daysWasher,
-  hoursWasher
+  timesWasher
 } = require("../controllers/WasherController")
 
 // Middlewares
-const { washerInsertValidation, commentValidation, daysValidation, hoursValidation } = require("../middlewares/washerValidation")
+const { washerInsertValidation, commentValidation, timesValidation } = require("../middlewares/washerValidation")
 const authGuardAdmin = require("../middlewares/authGuardAdmin")
 const authGuard = require("../middlewares/authGuard")
 const validate = require ("../middlewares/handleValidation")
@@ -32,7 +31,6 @@ router.delete("/:id", authGuardAdmin, deleteWasher)
 router.get("/", getAllWashers)
 router.get("/:id", getWasherById)
 router.put("/assessments/:id", authGuard, commentValidation(), validate, assessmentWasher)
-router.put("/times/:id", authGuardAdmin, daysValidation(), validate, daysWasher)
-router.put("/times/:id", authGuardAdmin, hoursValidation(), validate, hoursWasher)
+router.put("/times/:id", authGuardAdmin, timesValidation(), validate, timesWasher)
 
 module.exports = router

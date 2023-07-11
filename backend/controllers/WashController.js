@@ -2,6 +2,7 @@ const User = require("../models/User");
 const Car = require("../models/Car");
 const Washer = require("../models/Washer");
 const Wash = require("../models/Wash");
+const Admin = require("../models/Admin")
 
 const mongoose = require("mongoose");
 
@@ -59,41 +60,39 @@ const insertWash = async (req, res) => {
   }
 };
 
-// Remove a wash from DB
-const deleteWash = async(req, res) => {
-  const {id} = req.params 
+const deleteWash = async (req, res) => {
+  const { id } = req.params;
+  const reqUser = req.user;
+  const reqAdmin = req.admin;
 
-  const reqUser = req.user 
   try {
-    const wash = await Wash.findById(new mongoose.Types.ObjectId(id))
+    const wash = await Wash.findOne({ _id: id });
 
     // Check if wash exists
-    if(!wash) {
-      res.status(404).json({ errors: ["Lavagem não encontrada!"] })
-      return
+    if (!wash) {
+      return res.status(404).json({ errors: ["Lavagem não encontrada!"] });
     }
 
     // Check if wash belongs to user
-    if(!wash.userId.equals(reqUser._id)) {
-      return res
-        .status(422)
-        .json({ 
-          errors: ["Ocorreu um erro, por favor tente novamente mais tarde."]
-        })
+    if (reqUser && !wash.userId.equals(reqUser._id) && !reqAdmin) {
+      return res.status(422).json({
+        errors: ["Ocorreu um erro, por favor tente novamente mais tarde."],
+      });
     }
 
-    await Wash.findByIdAndDelete(wash._id)
+    await Wash.findOneAndDelete({ _id: id });
 
-    res
-      .status(200)
-      .json({ 
-        id: wash._id, message: "Lavagem desmarcada com sucesso." 
-      })
+    res.status(200).json({
+      id: wash._id,
+      message: "Lavagem desmarcada com sucesso.",
+    });
   } catch (error) {
-      res.status(404).json({ errors: ["Lavagem não encontrada!"] })
-      return
+    console.log(error);
+    res.status(500).json({
+      errors: ["Ocorreu um erro no servidor. Por favor, tente novamente mais tarde."],
+    });
   }
-}
+};
 
 // Get all washes
 const getAllWashes = async(req, res) => {

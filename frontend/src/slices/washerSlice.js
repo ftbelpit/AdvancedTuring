@@ -178,11 +178,11 @@ export const washerSlice = createSlice({
       state.success = true;
       state.error = null;
     
-      const { days, hours } = action.payload.time;
+      const { day, hour } = action.payload.time;
     
       state.washer.times.push({
-        days,
-        hours
+        day,
+        hour
       });
     
       state.message = action.payload.message;
