@@ -53,10 +53,7 @@ export const getWasherWashes = createAsyncThunk(
 export const deleteWash = createAsyncThunk(
   "wash/delete",
   async (id, thunkAPI) => {
-    const { token } = thunkAPI.getState().auth.user;
-    const { token_admin } = thunkAPI.getState().authAdmin.admin;
-
-    const data = await washService.deleteWash(id, token || token_admin);
+    const data = await washService.deleteWash(id);
 
     // Verifique os erros
     if (data.errors) {

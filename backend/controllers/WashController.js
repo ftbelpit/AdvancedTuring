@@ -2,13 +2,12 @@ const User = require("../models/User");
 const Car = require("../models/Car");
 const Washer = require("../models/Washer");
 const Wash = require("../models/Wash");
-const Admin = require("../models/Admin")
 
 const mongoose = require("mongoose");
 
 // Inserir uma lavagem associada a um carro existente
 const insertWash = async (req, res) => {
-  const { fabricante, modelo, name, day, hour } = req.body;
+  const { fabricante, modelo, name, date, hour } = req.body;
 
   const reqUser = req.user;
 
@@ -37,7 +36,8 @@ const insertWash = async (req, res) => {
     const newWash = await Wash.create({
       car: {
         fabricante: car.fabricante,
-        modelo: car.modelo
+        modelo: car.modelo,
+        ano: car.ano
       },
       washer: {
         name: washer.name
@@ -46,7 +46,7 @@ const insertWash = async (req, res) => {
       userId: user._id,
       userName: user.name,
       washerPrice: washer.price,
-      day,
+      date,
       hour
     });
 

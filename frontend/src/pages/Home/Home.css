@@ -13,10 +13,10 @@
 
 .home-options {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   margin: 0 auto;
-  width: 70%;
+  width: 100%;
   margin-bottom: 10px;
 }
 
@@ -35,7 +35,6 @@
 
 .select, .select2  {
   position: relative;
-  margin-right: 20px;
   background-color: #fff;
   padding: 20px;
   border-radius: 10px;
@@ -53,14 +52,6 @@ select:hover {
   color: #BCF7FF;
   border: 1px solid #BCF7FF;
   border-radius: 10px;
-}
-
-.select select {
-  width: 70%; 
-}
-
-.select2 select {
-  width: 40%;
 }
 
 .select select, 
@@ -116,10 +107,9 @@ select:hover {
 }
 
 .home-note {
-  margin-right: 30px; 
   position: absolute;
   top: 8px;
-  right: 45px;
+  right: 9%;
 }
 
 .home-price {
@@ -142,7 +132,10 @@ select:hover {
 .home-assets-detail {
   display: flex;
   justify-content: space-between;
-  
+}
+
+.home-assets-detail span {
+  font-weight: bold;
 }
 
 .button-assessment,

@@ -25,8 +25,7 @@ const Times = () => {
   } = useSelector((state) => state.washer);
 
   const [showPopup, setShowPopup] = useState(false);
-  const [days, setDays] = useState("")
-  const [hours, setHours] = useState("")
+  const [hour, setHour] = useState("")
 
   const popupRef = useRef(null);
 
@@ -51,7 +50,6 @@ const Times = () => {
   const resetComponentMessage = () => {
     setTimeout(() => {
       dispatch(resetMessage());
-      setShowPopup(false);
     }, 2000);
   };
 
@@ -59,23 +57,21 @@ const Times = () => {
     e.preventDefault();
 
     const timeData = {
-      days: days,
-      hours: hours,
+      hour,
       id: washer._id,
     };
 
     dispatch(times(timeData));
 
-    setDays("")
-    setHours("")
+    setHour("")
 
     resetComponentMessage();
+    // setShowPopup(false);
   };
 
   const handleRateButtonClick = () => {
     setShowPopup(true);
   };
-
 
   if (loading) {
     return <p>Carregando...</p>;
@@ -108,19 +104,12 @@ const Times = () => {
                   <div className="popup-content-times">
                     <h2>Adicionar Horários</h2>
                     <form onSubmit={handleTime}>
-                      <label>Dias:</label>
-                      <input
-                        type="text"
-                        placeholder="Insira os dias" 
-                        onChange={(e) => setDays(e.target.value)} 
-                        value={days || ""}
-                      />
                       <label>Horários:</label>
                       <input
                         type="text"
                         placeholder="Insira os horários" 
-                        onChange={(e) => setHours(e.target.value)} 
-                        value={hours || ""}
+                        onChange={(e) => setHour(e.target.value)} 
+                        value={hour || ""}
                       />
                       <div className="button-container-times">
                         {!loadingWasher && <input type="submit" value="Enviar Avaliação" />}
@@ -133,16 +122,13 @@ const Times = () => {
                 </div>
               </div>
             )}
-            <h3 className="horarios">Horários</h3>
+            <h3 className="horarios">Horários de segunda a sexta</h3>
             {washer.times.length === 0 && <p>Não há horaŕios...</p>}
             {washer.times.map(( time , index) => (
               time && (
                 <div className="time-user" key={`${time._id}-${index}`}>
-                  <div className="time-days">
-                    <span className="days">Dias de trabalho: {time.day}</span>
-                  </div>
                   <div className="time-hours"> 
-                    <span className="hours">Horários disponíveis: {time.hour}</span>
+                    <span className="hours">{time.hour}</span>
                   </div>
                 </div>
               )

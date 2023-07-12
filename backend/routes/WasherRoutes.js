@@ -8,7 +8,8 @@ const {
   getAllWashers, 
   getWasherById, 
   assessmentWasher,
-  timesWasher
+  timesWasher,
+  deleteTime
 } = require("../controllers/WasherController")
 
 // Middlewares

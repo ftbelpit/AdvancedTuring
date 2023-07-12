@@ -46,8 +46,8 @@ const getWasherWashes = async(id) => {
 }
 
 // Delete a wash
-const deleteWash = async (id, token, token_admin) => {
-  const config = requestConfig("DELETE", null, token || token_admin);
+const deleteWash = async (id) => {
+  const config = requestConfig("DELETE", null);
 
   try {
     const res = await fetch(api + "/washes/" + id, config)

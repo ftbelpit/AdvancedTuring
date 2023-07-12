@@ -42,24 +42,10 @@ const commentValidation = () => {
 const timesValidation = () => {
   return [
     body("hour")
-      .custom((value) => {
-        if (!Array.isArray(value)) {
-          value = [value]; // Transforma em um array caso não seja
-        }
-
-        const validHours = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
-
-        const invalidHours = value.filter((hour) => {
-          // Verifica se a hora não está no padrão estabelecido ou se está repetida
-          return !validHours.includes(hour) || value.indexOf(hour) !== value.lastIndexOf(hour);
-        });
-
-        if (invalidHours.length > 0) {
-          throw new Error(`Horas inválidas: ${invalidHours.join(", ")}`);
-        }
-        return true;
-      })
-      .withMessage("As horas são obrigatórias, devem estar no padrão estabelecido e não podem ser repetidas.")
+      .isString()
+      .withMessage('A hora é obrigatória')
+      .matches(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/)
+      .withMessage('Formato de hora inválido (HH:mm)')
   ];
 };
 

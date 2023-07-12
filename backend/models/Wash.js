@@ -8,6 +8,7 @@ const washSchema = new Schema(
     car: {
       fabricante: String,
       modelo: String,
+      ano: Number
     },
     washer: {
       name: String,

@@ -55,7 +55,13 @@
   padding: 5px;
 }
 
-.wash-price-date {
+.wash-div {
   display: flex;
-  
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.wash-price-button {
+  display: flex;
+  justify-content: space-between;
 }

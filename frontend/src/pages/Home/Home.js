@@ -43,14 +43,10 @@ const Home = () => {
     if (!selectedCar) {
       setShowPopup(true);
     } else {
-      const { fabricante, modelo } = selectedCar;
+      const { fabricante, modelo, ano } = selectedCar;
   
       // Combinar os parâmetros em uma única string
-      const params = `fabricanteParam=${encodeURIComponent(
-        fabricante
-      )}&modeloParam=${encodeURIComponent(modelo)}&washerName=${encodeURIComponent(
-        washerName
-      )}`;
+      const params = `fabricanteParam=${encodeURIComponent(fabricante)}&modeloParam=${encodeURIComponent(modelo)}&anoParam=${encodeURIComponent(ano)}&washerName=${encodeURIComponent(washerName)}`;
   
       resetComponentMessage();
   
@@ -139,7 +135,7 @@ const Home = () => {
                   value={car._id}
                   className="select-button"
                 >
-                  {car.fabricante} {car.modelo}
+                  {car.fabricante} {car.modelo} {car.ano}
                 </option>
               ))}
           </select>

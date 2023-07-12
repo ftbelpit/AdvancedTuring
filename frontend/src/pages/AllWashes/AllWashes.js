@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect  } from "react";
 
 // redux
-import { getWashes, getUserWashes, deleteWash } from "../../slices/washSlice";
+import { getWashes, getUserWashes, deleteWash, resetMessage } from "../../slices/washSlice";
 import { useParams } from "react-router-dom";
 import { getWashers } from "../../slices/washerSlice";
 
@@ -35,8 +35,15 @@ const AllWashes = () => {
     dispatch(getWashes())
   }, [dispatch, id]) 
 
+  const resetComponentMessage = () => {
+    setTimeout(() => {
+      dispatch(resetMessage());
+    }, 2000);
+  };
+
   const handleDelete = (id) => {
     dispatch(deleteWash(id))
+    resetComponentMessage()
   }
 
   if (loading) {

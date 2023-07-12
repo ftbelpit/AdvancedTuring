@@ -80,13 +80,12 @@ export const assessments = createAsyncThunk(
 export const times = createAsyncThunk(
   "washer/times",
   async(timeData, thunkAPI) => {
-    const { days, hours } = timeData;
+    const { hour } = timeData;
     const token = thunkAPI.getState().authAdmin.admin.token_admin;
 
     const data = await washerService.times(
       { 
-        days,
-        hours
+        hour
       }, 
       timeData.id, 
       token
@@ -178,12 +177,9 @@ export const washerSlice = createSlice({
       state.success = true;
       state.error = null;
     
-      const { day, hour } = action.payload.time;
+      const { hour } = action.payload.time;
     
-      state.washer.times.push({
-        day,
-        hour
-      });
+      state.washer.times.push(hour);
     
       state.message = action.payload.message;
     })

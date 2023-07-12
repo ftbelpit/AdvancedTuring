@@ -1,6 +1,6 @@
 import "./MyWashes.css"
 
-import { format, addDays, isWeekend } from 'date-fns';
+import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 import Message from "../../components/Message";
@@ -18,6 +18,8 @@ const MyWashes = () => {
   const { id } = useParams()
 
   const dispatch = useDispatch()
+
+  const currentDate = new Date();
 
   const { loading } = useSelector((state) => state.user)
 
@@ -43,22 +45,9 @@ const MyWashes = () => {
     resetComponentMessage()
   }
 
-  const getWeekdayDate = (weekday) => {
-    const currentDate = new Date();
-    let date = addDays(currentDate, 1); // Começa a busca a partir de amanhã
-
-    while (isWeekend(date) || date.getDay() !== weekday) {
-      date = addDays(date, 1); // Incrementa um dia até encontrar o próximo dia útil
-    }
-
-    return date;
-  };
-
   if (loading) {
     return <p>Carregando...</p>
   }
-
-  const currentDate = new Date(); // Definir currentDate aqui
 
   return (
     <div className="wash-list">
@@ -66,42 +55,48 @@ const MyWashes = () => {
         <h2>Minhas lavagens</h2>
       </div>
       {washes && washes.length > 0 && washes.map((wash) => {
-        const washDay = wash.day;
-        const washDate = getWeekdayDate(washDay);
+      const washDate = new Date(wash.date);
+      washDate.setDate(washDate.getDate() + 1); // Adiciona um dia à data
 
-        const dataFormatada = format(washDate, "d 'de' MMMM 'de' yyyy", {
-          locale: ptBR,
-        });
+      const dataFormatada = format(washDate, "d 'de' MMMM 'de' yyyy", {
+        locale: ptBR,
+      });
 
-        const washDateIsPast = washDate < currentDate;
+        const washDateIsPast = washDate < currentDate; // Verifica se a data da lavagem é passada
 
         return (
           <div className="wash-card" key={wash._id}>
             <div className="wash-info">
               <span>Lavador</span>
-              <span>{wash.washer.name}</span>
+              <p>{wash.washer.name}</p>
             </div>
             <div className="wash-car">
               <span>Carro</span>
-              <span>{wash.car.fabricante} {wash.car.modelo}</span>
+              <p>{wash.car.fabricante} {wash.car.modelo}({wash.car.ano})</p>
             </div>
-            <div className="wash-price-date">
-              <span className="wash-price">R$ {wash.washerPrice}</span>
-              <span className="wash-date">
+            <div className="wash-div">  
+              <div className="wash-price-button">
                 {washDateIsPast ? ( // Verifica se a data é passada
-                  dataFormatada
-                ) : (
-                  <>
-                    <button
-                      className="delete-button"
-                      onClick={() => handleDelete(wash._id)}
-                    >
-                      Desmarcar lavagem
-                    </button>
-                    {dataFormatada}
-                  </>
-                )}
-              </span>
+                    dataFormatada
+                  ) : (
+                    <>
+                      <button
+                        className="delete-button"
+                        onClick={() => handleDelete(wash._id)}
+                      >
+                        Desmarcar lavagem
+                      </button>
+                      <span className="wash-price">
+                      R$ {wash.washerPrice}
+                      </span>
+                    </>
+                  )}      
+              </div>
+              <div className="wash-date-div">
+                <span className="wash-date">
+                  Hora: {wash.hour} Data: {dataFormatada}  
+                </span>
+              </div>
             </div>
           </div>
         )

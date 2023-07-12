@@ -1,4 +1,5 @@
 const {body} = require("express-validator")
+const moment = require("moment");
 
 const washInsertValidation = () => {
   return [
@@ -12,20 +13,23 @@ const washInsertValidation = () => {
       .withMessage("O modelo é obrigatório.")
       .isLength({min: 2})
       .withMessage("O modelo precisa ter no mínimo 2 caracteres."),
+    body("ano")
+      .isNumeric()
+      .withMessage("O ano deve ser númerico.")
+      .isLength({ min: 4 })
+      .withMessage("O ano precisa ter no mínimo 4 algarismos."),
     body("name")
       .isString()
       .withMessage("O nome do lavador é obrigatório.")
       .isLength({min: 2})
       .withMessage("O nome precisa ter no mínimo 2 caracteres."),
     body("date")
-      .isDate()
-      .withMessage("A data é obrigatória.")
-      .isLength()
-      .withMessage("Insira a data da lavagem."),
+      .notEmpty()
+      .withMessage("A data é obrigatória."),
     body("hour")
       .isString()
       .withMessage("O horário é obrigatório.")
-      .isLength()
+      .isLength({min: 5})
       .withMessage("Insira o horário da lavagem."),
   ] 
 }

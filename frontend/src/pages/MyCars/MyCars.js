@@ -60,9 +60,11 @@ const MyCars = () => {
             <span className="modelo">{car.modelo}</span>
             <p className="ano">{car.ano}</p>
           </div>
-          <button className="delete-button" onClick={() => handleDelete(car._id)}>
-            Excluir carro
-          </button>
+          <div>
+            <button className="delete-button" onClick={() => handleDelete(car._id)}>
+              Excluir carro
+            </button>
+          </div>
         </div>  
       ))}
       {errorCar && <Message msg={errorCar} type="error"/>}

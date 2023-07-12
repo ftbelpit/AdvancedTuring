@@ -1,5 +1,11 @@
 import "./AddWash.css";
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+import { registerLocale, setDefaultLocale } from "react-datepicker";
+import pt from "date-fns/locale/pt-BR";
+
 // components
 import Message from "../../components/Message";
 
@@ -13,6 +19,8 @@ import { insertWash, resetMessage } from "../../slices/washSlice";
 import { getWashers } from "../../slices/washerSlice";
 import { getUserCars } from "../../slices/carSlice";
 
+import {BsFillCalendarCheckFill} from "react-icons/bs"
+
 const AddWash = () => {
   const { id } = useParams();
 
@@ -24,6 +32,7 @@ const AddWash = () => {
   const params = new URLSearchParams(location.search);
   const fabricanteParam = params.get("fabricanteParam");
   const modeloParam = params.get("modeloParam");
+  const anoParam = params.get("anoParam");
   const washerName = params.get("washerName");
 
   const { loading } = useSelector((state) => state.user);
@@ -39,10 +48,10 @@ const AddWash = () => {
 
   const [fabricante, setFabricante] = useState(fabricanteParam || "");
   const [modelo, setModelo] = useState(modeloParam || "");
+  const [ano, setAno] = useState(anoParam || "");
   const [name, setName] = useState(washerName || "");
-  const [day, setDay] = useState("");
+  const [date, setDate] = useState("");
   const [hour, setHour] = useState("");
-  const [businessDaysOfWeek, setBusinessDaysOfWeek] = useState([]);
 
   const newWashForm = useRef();
 
@@ -63,18 +72,25 @@ const AddWash = () => {
     const washData = {
       fabricante,
       modelo,
+      ano,
       name,
-      day,
+      date,
       hour,
     };
 
+    if (isWeekend(date) || isPastDate(date)) {
+      // Ignora a submissão se a data for inválida
+      return;
+    }
+
     dispatch(insertWash(washData));
 
-    setFabricante("");
-    setModelo("");
-    setName("");
-    setDay("");
-    setHour("");
+    setFabricante("")
+    setModelo("")
+    setAno("")
+    setName("")
+    setDate("")
+    setHour("")
 
     resetComponentMessage();
   };
@@ -87,23 +103,26 @@ const AddWash = () => {
     }
   }, [messageWash, navigate, userAuth._id]);
 
-  useEffect(() => {
-    // Array contendo os nomes dos dias úteis
-    const businessWeekDays = [
-      "Segunda-feira",
-      "Terça-feira",
-      "Quarta-feira",
-      "Quinta-feira",
-      "Sexta-feira",
-    ];
+  const isWeekend = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDay();
+    return day === 0 || day === 6; // 0 representa domingo, 6 representa sábado
+  };
 
-    // Define o novo array de dias úteis
-    setBusinessDaysOfWeek(businessWeekDays);
-  }, []);
+  // Função para verificar se uma data é anterior à data atual
+  const isPastDate = (dateString) => {
+    const date = new Date(dateString);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Define a hora atual como 00:00:00 para considerar apenas a data
+    return date < today;
+  };
 
   if (loading) {
     return <p>Carregando...</p>;
   }
+
+  registerLocale("pt-BR", pt);
+  setDefaultLocale("pt-BR");
 
   return (
     <div className="add-wash">
@@ -146,6 +165,20 @@ const AddWash = () => {
                 </select>
               </div>
               <div className="add-wash-card">
+                <label>Ano</label>
+                <select
+                  onChange={(e) => setAno(e.target.value)}
+                  value={ano || ""}
+                >
+                  <option>Escolha o ano do carro</option>
+                  {cars.map((car) => (
+                    <option key={car._id} value={car.ano}>
+                      {car.ano}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="add-wash-card">
                 <label>Lavador</label>
                 <select
                   onChange={(e) => setName(e.target.value)}
@@ -160,18 +193,18 @@ const AddWash = () => {
                 </select>
               </div>
               <div className="add-wash-card">
-                <label>Dia</label>
-                <select
-                  onChange={(e) => setDay(e.target.value)}
-                  value={day || ""}
-                >
-                  <option>Escolha o dia</option>
-                  {businessDaysOfWeek.map((businessDay) => (
-                    <option key={businessDay} value={businessDay}>
-                      {businessDay}
-                    </option>
-                  ))}
-                </select>
+                <label>Data</label>
+                <div className="date-input">
+                  <DatePicker
+                    placeholderText="Escolha a data"
+                    selected={date}
+                    onChange={(date) => setDate(date)}
+                    minDate={new Date()}
+                    filterDate={(date) => !isWeekend(date)}
+                    dateFormat="dd/MM/yyyy"
+                  />
+                  <BsFillCalendarCheckFill className="date-icon" />
+                </div>
               </div>
               <div className="add-wash-card">
                 <label>Horário</label>

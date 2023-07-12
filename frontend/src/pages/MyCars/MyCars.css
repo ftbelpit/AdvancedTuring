@@ -7,10 +7,11 @@
   text-transform: capitalize;
 }
 
-.card-cars{
+.card-cars {
   padding: 10px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 16px;
   font-size: 0.97em;
   background-color: white;
@@ -19,6 +20,6 @@
   box-shadow: 0 2px 8px rgb(0, 0, 0);
 }
 
-span {
+.card-cars span {
   font-weight: bold;
 }
