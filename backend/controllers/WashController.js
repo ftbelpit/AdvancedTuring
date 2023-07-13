@@ -8,7 +8,6 @@ const mongoose = require("mongoose");
 // Inserir uma lavagem associada a um carro existente
 const insertWash = async (req, res) => {
   const { fabricante, modelo, name, date, hour } = req.body;
-
   const reqUser = req.user;
 
   try {
@@ -22,7 +21,7 @@ const insertWash = async (req, res) => {
     
     const washer = await Washer.findOne({
       name: { $regex: new RegExp(name, "i") }
-    });    
+    });
 
     if (!car) {
       return res.status(404).json({ errors: ["Carro não encontrado."] });
@@ -30,6 +29,19 @@ const insertWash = async (req, res) => {
 
     if (!washer) {
       return res.status(404).json({ errors: ["Lavador não encontrado."] });
+    }
+
+    // Verifica se já existe uma lavagem com a mesma data, hora e lavador
+    const existingWash = await Wash.findOne({
+      washer: {
+        name: washer.name
+      },
+      date,
+      hour
+    });
+
+    if (existingWash) {
+      return res.status(409).json({ errors: ["Já existe uma lavagem agendada com a mesma data, hora e lavador."] });
     }
 
     // Cria uma nova lavagem associada ao carro existente
@@ -51,14 +63,22 @@ const insertWash = async (req, res) => {
     });
 
     // Se a lavagem for criada com sucesso, retorna os dados
-    res.status(201).json(newWash)
+    return res.status(201).json(newWash);
   } catch (error) {
     console.log(error);
-    res.status(422).json({
+    return res.status(422).json({
       errors: ["Houve um problema, por favor tente novamente mais tarde."]
     });
   }
 };
+
+module.exports = {
+  insertWash,
+};
+
+
+module.exports = { insertWash };
+
 
 const deleteWash = async (req, res) => {
   const { id } = req.params;

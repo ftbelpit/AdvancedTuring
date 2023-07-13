@@ -36,19 +36,21 @@ const UserCars = () => {
       <div className="profile-title">
         <h2>Carros do usuário</h2>
       </div>
-      {cars && cars.length > 0 ? (
-        cars.map((car) => (
-          <div className="profile-cars" key={car._id}>
-            <div>
-              <span className="fabricante">{car.fabricante} </span>
-              <span className="modelo">{car.modelo}</span>
-              <p className="ano">{car.ano}</p>
+      <div className="users-cars-container">
+        {cars && cars.length > 0 ? (
+          cars.map((car) => (
+            <div className="profile-cars" key={car._id}>
+              <div>
+                <span className="fabricante">{car.fabricante} </span>
+                <span className="modelo">{car.modelo}</span>
+                <p className="ano">{car.ano}</p>
+              </div>
             </div>
-          </div>
-        ))
-      ) : (
-        <p>Nenhum carro encontrado.</p>
-      )}
+          ))
+        ) : (
+          <p>Nenhum carro encontrado.</p>
+        )}
+      </div>
     </div>
   )
 }

@@ -10,22 +10,25 @@ const initialState = {
   message: null,
 }
 
-// Insert user wash
+// Async Thunk para inserir a lavagem do usuário
 export const insertWash = createAsyncThunk(
   "wash/insert",
-  async(wash, thunkAPI) => {
-    const token = thunkAPI.getState().auth.user.token
+  async (wash, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
 
-    const data = await washService.insertWash(wash, token)
+    try {
+      const data = await washService.insertWash(wash, token);
 
-    // Check for errors
-    if(data.errors) {
-      return thunkAPI.rejectWithValue(data.errors[0])
+      if (data.errors) {
+        throw new Error(data.errors[0]);
+      }
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
     }
-
-    return data
   }
-)
+);
 
 // Get user washes
 export const getUserWashes = createAsyncThunk(

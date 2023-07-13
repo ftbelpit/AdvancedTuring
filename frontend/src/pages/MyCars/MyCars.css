@@ -1,5 +1,4 @@
 #my-cars {
-  width: 50%;
   margin: 0 auto;
   display:flex;
   flex-direction: column;
@@ -8,16 +7,18 @@
 }
 
 .card-cars {
+  width: 50%;
   padding: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
   font-size: 0.97em;
   background-color: white;
   border-radius: 10px;
   border: 1px solid #000;
   box-shadow: 0 2px 8px rgb(0, 0, 0);
+  margin: 0 auto;
+  margin-bottom: 20px;
 }
 
 .card-cars span {

@@ -2,19 +2,24 @@
   display: flex;
   flex-direction: column;
   margin: 0 auto;
+}
+
+.washes-container {
   width: 70%;
+  margin: 0 auto;
 }
 
 .washes-card {
   padding: 25px;
-  display: grid;
-  grid-template-columns: 2.5fr 1fr 2fr;
-  background-color: #fff;
-  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
   position: relative;
   border-radius: 10px;
   border: 1px solid #000;
   box-shadow: 0 2px 8px rgb(0, 0, 0);
+  margin-bottom: 20px;
 }
 
 .washes-card p {
@@ -22,7 +27,9 @@
   padding-top: 3px;
 }
 
-.washes-info {
+.washes-info,
+.washes-car,
+.washes-user {
   display: flex;
   justify-content: center;
   text-transform: capitalize;
@@ -30,10 +37,15 @@
 }
 
 .washes-car{
-  display: flex;
-  justify-content: center;
-  text-transform: capitalize;
-  flex-direction: column;
+  margin-right: 50px;
+  width: 30%;
+}
+
+.washes-info p,
+.washes-car p,
+.washes-user p {
+  padding-top: 0;
+  margin-top: 0;
 }
 
 .washes-price {
@@ -52,26 +64,31 @@
   bottom: 0;
   right: 0;
   padding: 5px;
+  font-weight: bold;
 }
 
-.washes-price-date {
-  display: flex;
+.washes-card .delete-button {
+  position: absolute;
+  top: 2px;
+  right: 70px;
 }
 
-.washes-mark {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  margin-right: 130px;
-}
-
-.washes-details {
-  display: flex;
-}
-
-.washes-price-date .success,
-.washes-price-date .failed {
-  width: 165px;
+.washes-card .mark-button {
+  position: absolute;
+  top: 2px;
+  right: 70px;
   border-radius: 10px;
+  background-color: #10f55c;
+  color: #000;
+  border: 1px solid #000;
+  width: 165px;
+  height: 30px;
+  margin-right: 5px;
+  padding: 2px;
+}
+
+.washes-card .mark-button:hover {
+  color: #10f55c;
+  background-color: #000;
+  border: 1px solid #10f55c;
 }

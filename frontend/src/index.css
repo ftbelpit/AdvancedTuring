@@ -122,3 +122,16 @@ select:focus {
   margin-top: 20px;
   text-align: center;
 }
+
+.click a{
+  color: #000;
+  font-weight: bold;
+}
+
+.click a:hover {
+  padding: 0;
+  border-radius: 0;
+  background-color: transparent;
+  border: none;
+  text-decoration: underline;
+}

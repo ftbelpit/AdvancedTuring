@@ -135,19 +135,21 @@ const Assessments = () => {
                 </div>
               </div>
             )}
-            <h3>Avaliações: ({washer.assessments.length})</h3>
-            {washer.assessments.length === 0 && <p>Não há avaliações...</p>}
-            {washer.assessments.map(( assessment, index) => (
-              assessment && (
-                <div className="assessment-user" key={`${assessment._id}-${index}`}>
-                  <div className="assessment-info">
-                    <span className="name">Nome do usuário: {assessment.userName}</span>
-                    <span className="score">Nota: {assessment.score}</span>
-                    <span className="assessment">Avaliação: {assessment.assessment}</span>
+            <div className="assessments-container">
+              <h3>Avaliações: ({washer.assessments.length})</h3>
+              {washer.assessments.length === 0 && <p>Não há avaliações...</p>}
+              {washer.assessments.map(( assessment, index) => (
+                assessment && (
+                  <div className="assessment-user" key={`${assessment._id}-${index}`}>
+                    <div className="assessment-info">
+                      <span className="name">Nome do usuário: {assessment.userName}</span>
+                      <span className="score">Nota: {assessment.score}</span>
+                      <span className="assessment">Avaliação: {assessment.assessment}</span>
+                    </div>
                   </div>
-                </div>
-              )
-            ))}
+                )
+              ))}
+            </div>
           </>
         )}
       </div>

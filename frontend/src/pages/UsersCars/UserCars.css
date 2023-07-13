@@ -1,5 +1,4 @@
 #profile {
-  width: 50%;
   margin: 0 auto;
   display:flex;
   flex-direction: column;
@@ -7,14 +6,20 @@
   text-transform: capitalize;
 }
 
+.users-cars-container {
+  width: 50%;
+  margin: 0 auto;
+}
+
 .profile-cars{
   padding: 10px;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 16px;
   font-size: 0.97em;
   background-color: white;
   border-radius: 10px;
   border: 1px solid #000;
   box-shadow: 0 2px 8px rgb(0, 0, 0);
+  margin-bottom: 16px;
+  font-weight: bold;
 }
