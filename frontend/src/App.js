@@ -22,7 +22,7 @@ import AddCar from './pages/AddCar/AddCar';
 import MyWashes from './pages/MyWashs/MyWashes';
 import MyUsers from './pages/MyUsers/MyUsers';
 import HomeAdmin from './pages/Home/HomeAdmin';
-import AddWasher from './pages/Washer/AddWasher';
+import AddWasher from './pages/AddWasher/AddWasher';
 import UserCars from './pages/UsersCars/UserCars';
 import AddWash from './pages/AddWash/AddWash';
 import Assessments from './pages/Assessments/Assessments';

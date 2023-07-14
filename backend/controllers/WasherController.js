@@ -126,6 +126,7 @@ const assessmentWasher = async (req, res) => {
   });
 };
 
+// adicionar horários para o lavador
 const timesWasher = async (req, res) => {
   const { id } = req.params;
   const { hour } = req.body;

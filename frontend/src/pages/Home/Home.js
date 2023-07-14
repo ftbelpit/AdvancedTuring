@@ -39,21 +39,21 @@ const Home = () => {
     }, 2000);
   };
 
-  const handleWashButtonClick = (washerName) => {
+  const handleWashButtonClick = (washerId, washerName) => {
     if (!selectedCar) {
       setShowPopup(true);
     } else {
       const { fabricante, modelo, ano } = selectedCar;
   
       // Combinar os parâmetros em uma única string
-      const params = `fabricanteParam=${encodeURIComponent(fabricante)}&modeloParam=${encodeURIComponent(modelo)}&anoParam=${encodeURIComponent(ano)}&washerName=${encodeURIComponent(washerName)}`;
+      const params = `fabricanteParam=${encodeURIComponent(fabricante)}&modeloParam=${encodeURIComponent(modelo)}&anoParam=${encodeURIComponent(ano)}&washerId=${encodeURIComponent(washerId)}&washerName=${encodeURIComponent(washerName)}`;
   
       resetComponentMessage();
   
       // Redirecionar para a página AddWash com os parâmetros combinados
       navigate(`/addwash/${user._id}?${params}`);
     }
-  };
+  }  
 
   const closePopup = () => {
     setShowPopup(false);
@@ -194,7 +194,7 @@ const Home = () => {
                 <button
                   type="submit"
                   className="button-wash"
-                  onClick={() => handleWashButtonClick(washer.name)}
+                  onClick={() => handleWashButtonClick(washer._id, washer.name)}
                 >
                   Lavar meu carro
                 </button>

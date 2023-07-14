@@ -86,7 +86,7 @@ const MyWashes = () => {
                       className="delete-button"
                       onClick={() => handleDelete(wash._id)}
                     >
-                      Desmarc ar lavagem
+                      Desmarcar lavagem
                     </button>
                     <span className="wash-price">
                       R$ {wash.washerPrice}
@@ -94,7 +94,6 @@ const MyWashes = () => {
                   </>
                 ) : (
                   <>
-                    
                     <span className="wash-price">
                     R$ {wash.washerPrice}
                     </span>

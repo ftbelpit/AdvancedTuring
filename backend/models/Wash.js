@@ -44,6 +44,25 @@ washSchema.methods.getFormattedDate = function () {
   return formattedDate;
 };
 
+// Adiciona um método estático para verificar a disponibilidade do horário
+washSchema.statics.checkAvailability = function (date, hour, washerId) {
+  return this.findOne({ date, hour, washerId }).exec();
+};
+
+// Adiciona um hook para verificar a disponibilidade antes de salvar
+washSchema.pre("save", async function (next) {
+  const existingWash = await this.constructor.checkAvailability(
+    this.date,
+    this.hour,
+    this.washerId
+  );
+  if (existingWash) {
+    const err = new Error("O horário não está disponível.");
+    return next(err);
+  }
+  next();
+});
+
 const Wash = mongoose.model('Wash', washSchema);
 
-module.exports = Wash;
+module.exports = Wash
