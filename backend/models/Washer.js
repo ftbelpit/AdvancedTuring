@@ -6,10 +6,10 @@ const washerSchema = new Schema(
     image: String,
     name: String,
     assessments: Array,
-    price: Number,
+    price: String,
     adminId: mongoose.ObjectId,
     adminName: String,
-    times: Array
+    hour: Array
   },
   {
     timestamps: true,

@@ -177,15 +177,15 @@ export const washerSlice = createSlice({
       state.success = true;
       state.error = null;
     
-      const { hour } = action.payload.time;
-    
-      state.washer.times.push(hour);
-    
+      const { hour } = action.payload.hour;
+      
+      state.washer.hour.push(hour);
+      
       state.message = action.payload.message;
     })
     .addCase(times.rejected, (state, action) => {
-      state.loading = false
-      state.error = action.payload
+      state.loading = false;
+      state.error = action.payload;    
     })
   }
 })

@@ -5,7 +5,7 @@ const carSchema = new Schema(
   {
     fabricante: String,
     modelo: String, 
-    ano: Number,
+    ano: String,
     userId: mongoose.ObjectId,
     userName: String,
   },

@@ -13,8 +13,7 @@ const Times = () => {
 
   const dispatch = useDispatch();
 
-  const {admin} = useSelector((state) => state.authAdmin)
-
+  const { admin } = useSelector((state) => state.authAdmin);
   const { loading } = useSelector((state) => state.admin);
 
   const {
@@ -25,7 +24,7 @@ const Times = () => {
   } = useSelector((state) => state.washer);
 
   const [showPopup, setShowPopup] = useState(false);
-  const [hour, setHour] = useState("")
+  const [hour, setHour] = useState("");
 
   const popupRef = useRef(null);
 
@@ -39,13 +38,20 @@ const Times = () => {
         setShowPopup(false);
       }
     };
-  
+
     document.addEventListener("mousedown", handleClickOutside);
-  
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);  
+  }, []);
+
+  useEffect(() => {
+    if (messageWasher) {
+      // Atualiza o estado washer com os novos dados após a adição do horário
+      dispatch(getWasher(id));
+    }
+  }, [dispatch, id, messageWasher]);
 
   const resetComponentMessage = () => {
     setTimeout(() => {
@@ -57,13 +63,13 @@ const Times = () => {
     e.preventDefault();
 
     const timeData = {
-      hour,
+      hour: hour,
       id: washer._id,
     };
 
     dispatch(times(timeData));
 
-    setHour("")
+    setHour("");
 
     resetComponentMessage();
     // setShowPopup(false);
@@ -89,7 +95,7 @@ const Times = () => {
         )}
       </div>
       <div>
-        {washer.times && (
+        {washer.hour && (
           <>
             {showPopup && (
               <div
@@ -107,8 +113,8 @@ const Times = () => {
                       <label>Horários:</label>
                       <input
                         type="text"
-                        placeholder="Insira os horários" 
-                        onChange={(e) => setHour(e.target.value)} 
+                        placeholder="Insira os horários"
+                        onChange={(e) => setHour(e.target.value)}
                         value={hour || ""}
                       />
                       <div className="button-container-times">
@@ -122,17 +128,20 @@ const Times = () => {
                 </div>
               </div>
             )}
-            <h3 className="horarios">Horários de segunda a sexta</h3>
-            {washer.times.length === 0 && <p>Não há horaŕios...</p>}
-            {washer.times.map(( time , index) => (
-              time && (
-                <div className="time-user" key={`${time._id}-${index}`}>
-                  <div className="time-hours"> 
-                    <span className="hours">{time.hour}</span>
+            <h3 className="horarios">Segunda a sexta</h3>
+            {washer.hour && washer.hour.length > 0 ? (
+              [...washer.hour] // Cria uma cópia do array original
+                .sort((a, b) => parseInt(a, 10) - parseInt(b, 10)) // Ordena os horários do menor ao maior
+                .map((hour, index) => (
+                  <div className="time-user" key={`${hour}-${index}`}>
+                    <div className="time-hours">
+                      <span className="hours">{hour}</span>
+                    </div>
                   </div>
-                </div>
-              )
-            ))}
+                ))
+            ) : (
+              <p>Nenhum horário encontrado.</p>
+            )}
           </>
         )}
       </div>
@@ -140,4 +149,4 @@ const Times = () => {
   );
 };
 
-export default Times;
+export default Times

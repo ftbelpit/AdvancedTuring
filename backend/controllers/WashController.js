@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 
 // Inserir uma lavagem associada a um carro existente
 const insertWash = async (req, res) => {
-  const { fabricante, modelo, washerId, date, hour } = req.body;
+  const { fabricante, modelo, ano, name, date, hour } = req.body;
   const reqUser = req.user;
 
   try {
@@ -16,10 +16,13 @@ const insertWash = async (req, res) => {
     // Encontra o carro existente no banco de dados
     const car = await Car.findOne({
       fabricante: { $regex: new RegExp(fabricante, "i") },
-      modelo: { $regex: new RegExp(modelo, "i") }
+      modelo: { $regex: new RegExp(modelo, "i") },
+      ano: { $regex: new RegExp(ano, "i") },
     });
-    
-    const washer = await Washer.findById(washerId);
+
+    const washer = await Washer.findOne({
+      name: { $regex: new RegExp(name, "i") }
+    });
 
     if (!car) {
       return res.status(404).json({ errors: ["Carro não encontrado."] });
@@ -29,21 +32,20 @@ const insertWash = async (req, res) => {
       return res.status(404).json({ errors: ["Lavador não encontrado."] });
     }
 
-    // Verifica se o horário está disponível para o lavador
-    const availableHour = washer.times.find((time) => time.hour === hour);
-    if (!availableHour) {
-      return res.status(409).json({ errors: ["O horário selecionado não está disponível para o lavador."] });
+    // Verifica se o horário está presente no array de horários do lavador
+    if (!washer.hour.includes(hour)) {
+      return res.status(400).json({ errors: ["O horário especificado não está disponível para este lavador."] });
     }
 
-    // Verifica se já existe uma lavagem com a mesma data, hora e lavador
+    // Verifica se já existe uma lavagem com o mesmo lavador, horário e data
     const existingWash = await Wash.findOne({
-      washerId,
+      washerId: washer._id,
+      "washer.hour": hour,
       date,
-      hour
     });
 
     if (existingWash) {
-      return res.status(409).json({ errors: ["Já existe uma lavagem agendada com a mesma data, hora e lavador."] });
+      return res.status(400).json({ errors: ["Já existe uma lavagem agendada com este lavador, horário e data."] });
     }
 
     // Cria uma nova lavagem associada ao carro existente
@@ -54,14 +56,14 @@ const insertWash = async (req, res) => {
         ano: car.ano
       },
       washer: {
-        name: washer.name
+        name: washer.name,
+        hour: hour
       },
       washerId: washer._id,
+      washerPrice: washer.price,
       userId: user._id,
       userName: user.name,
-      washerPrice: washer.price,
       date,
-      hour
     });
 
     // Se a lavagem for criada com sucesso, retorna os dados
@@ -73,6 +75,7 @@ const insertWash = async (req, res) => {
     });
   }
 }
+
 
 const deleteWash = async (req, res) => {
   const { id } = req.params;

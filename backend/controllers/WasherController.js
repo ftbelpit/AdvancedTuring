@@ -138,26 +138,21 @@ const timesWasher = async (req, res) => {
     return;
   }
 
-  // Verificar se o horário já existe na lista de horários do lavador
-  const existingHour = washer.times.find((time) => time.hour === hour);
-  if (existingHour) {
+  // Verificar se o horário já existe no array
+  if (washer.hour.includes(hour)) {
     res.status(400).json({ errors: [`O horário ${hour} já existe na lista`] });
     return;
   }
 
-  const timesWork = {
-    hour
-  };
-
-  washer.times.push(timesWork);
+  washer.hour.push(hour);
 
   await washer.save();
 
   res.status(200).json({
-    time: timesWork,
+    hour: washer.hour,
     message: "Horário adicionado com sucesso!",
   });
-};
+}
 
 module.exports = {
   insertWasher,

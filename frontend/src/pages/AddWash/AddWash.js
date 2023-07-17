@@ -19,7 +19,7 @@ import { insertWash, resetMessage } from "../../slices/washSlice";
 import { getWashers } from "../../slices/washerSlice";
 import { getUserCars } from "../../slices/carSlice";
 
-import { BsFillCalendarCheckFill } from "react-icons/bs";
+import {BsFillCalendarCheckFill} from "react-icons/bs"
 
 const AddWash = () => {
   const { id } = useParams();
@@ -53,7 +53,6 @@ const AddWash = () => {
   const [name, setName] = useState(washerName || "");
   const [date, setDate] = useState("");
   const [hour, setHour] = useState("");
-  const [scheduled, setScheduled] = useState(false);
 
   const newWashForm = useRef();
 
@@ -70,7 +69,7 @@ const AddWash = () => {
 
   const submitHandle = (e) => {
     e.preventDefault();
-  
+
     const washData = {
       fabricante,
       modelo,
@@ -78,31 +77,25 @@ const AddWash = () => {
       name,
       date,
       hour,
-      washerId,
+      washerId
     };
-  
+
     if (isWeekend(date) || isPastDate(date)) {
       // Ignora a submissão se a data for inválida
       return;
     }
-  
-    dispatch(insertWash(washData))
-      .then(() => {
-        setScheduled(true);
-        resetComponentMessage();
-      })
-      .catch((error) => {
-        // Lidar com erros durante o agendamento
-        console.log(error);
-      });
-  
-    setFabricante("");
-    setModelo("");
-    setAno("");
-    setName("");
-    setDate("");
-    setHour("");
-  };  
+
+    dispatch(insertWash(washData));
+
+    setFabricante("")
+    setModelo("")
+    setAno("")
+    setName("")
+    setDate("")
+    setHour("")
+
+    resetComponentMessage();
+  };
 
   useEffect(() => {
     if (messageWash) {
@@ -207,10 +200,7 @@ const AddWash = () => {
                   <DatePicker
                     placeholderText="Escolha a data"
                     selected={date}
-                    onChange={(date) => {
-                      setDate(date);
-                      setHour(""); // Limpar o horário ao selecionar uma nova data
-                    }}
+                    onChange={(date) => setDate(date)}
                     minDate={new Date()}
                     filterDate={(date) => !isWeekend(date)}
                     dateFormat="dd/MM/yyyy"
@@ -225,34 +215,13 @@ const AddWash = () => {
                   value={hour || ""}
                 >
                   <option>Escolha o horário</option>
-                  {washers.map((washer) => {
-                    if (washer._id === washerId) {
-                      const selectedWasher = washers.find((w) => w._id === washerId);
-                      if (selectedWasher && selectedWasher.times) {
-                        const unavailableHours = selectedWasher?.washes
-                          ?.filter((wash) => wash.date === date)
-                          ?.map((wash) => wash.hour);
-
-                          const availableTimes = selectedWasher.times
-                          .filter((time) => !unavailableHours?.includes(time.hour) || (hour && time.hour !== hour))
-                          .map((time, index) => (
-                            <option key={`${time.hour}-${index}`} value={time.hour}>
-                              {time.hour}
-                            </option>
-                          ))                       
-                        if (availableTimes.length === 0) {
-                          return (
-                            <option key="unavailable" disabled>
-                              Nenhum horário disponível
-                            </option>
-                          );
-                        }
-
-                        return availableTimes;
-                      }
-                    }
-                    return null;
-                  })}
+                  {washers.map((washer) =>
+                    washer.times.map((time) => (
+                      <option key={time.hour} value={time.hour}>
+                        {time.hour}
+                      </option>
+                    ))
+                  )}
                 </select>
               </div>
               <div className="add-button">
@@ -269,4 +238,4 @@ const AddWash = () => {
   );
 };
 
-export default AddWash;
+export default AddWash

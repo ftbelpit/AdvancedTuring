@@ -29,12 +29,10 @@
   margin-top: 5px;
 }
 
-.days,
 .hours {
   font-weight: bold;
 }
 
-.days::before,
 .hours::before {
   content: "\2022";
   margin-right: 5px;
