@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const format = require("date-fns")
-const ptBR = require("date-fns/locale")
 
 const washSchema = new Schema(
   {
@@ -29,11 +27,16 @@ const washSchema = new Schema(
   }
 );
 
-washSchema.methods.getFormattedDate = function () {
-  const formattedDate = format(this.date, 'dd/MM/yyyy', { locale: ptBR });
-  return formattedDate;
+washSchema.methods.checkDuplicate = async function () {
+  const existingWash = await mongoose.model('Wash').findOne({
+    washerId: this.washerId,
+    date: this.date,
+    'washer.hour': this.washer.hour
+  });
+
+  return !!existingWash;
 };
 
 const Wash = mongoose.model('Wash', washSchema);
 
-module.exports = Wash;
+module.exports = Wash

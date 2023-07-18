@@ -21,7 +21,8 @@ const insertWash = async (req, res) => {
     });
 
     const washer = await Washer.findOne({
-      name: { $regex: new RegExp(name, "i") }
+      name: { $regex: new RegExp(name, "i") },
+      hour: { $regex: new RegExp(hour, "i") }
     });
 
     if (!car) {
@@ -64,8 +65,8 @@ const insertWash = async (req, res) => {
       userId: user._id,
       userName: user.name,
       date,
-    });
-
+    })
+    
     // Se a lavagem for criada com sucesso, retorna os dados
     return res.status(201).json(newWash);
   } catch (error) {
@@ -75,6 +76,7 @@ const insertWash = async (req, res) => {
     });
   }
 }
+
 
 
 const deleteWash = async (req, res) => {

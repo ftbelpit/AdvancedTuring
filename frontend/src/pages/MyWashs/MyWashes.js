@@ -60,7 +60,7 @@ const MyWashes = () => {
         {washes && washes.length > 0 ? ( 
           washes.map((wash) => {
         const washDate = new Date(wash.date);
-        const washTime = wash.hour.split(":");
+        const washTime = wash.washer.hour.split(":");
         const washDateTime = new Date(washDate.getFullYear(), washDate.getMonth(), washDate.getDate(), washTime[0], washTime[1]);
 
         const dataFormatada = format(washDate, "d 'de' MMMM 'de' yyyy", {
@@ -101,7 +101,7 @@ const MyWashes = () => {
                 )}      
               </div>
               <span className="wash-date">  
-                {dataFormatada} às {wash.hour}
+                {dataFormatada} às {wash.washer.hour}
               </span>
             </div>
           )

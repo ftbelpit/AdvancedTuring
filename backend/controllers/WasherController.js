@@ -86,7 +86,7 @@ const getWasherById = async (req, res) => {
 
   // Check if washer exists
   if(!washer) {
-    res.status(404).json({ errors: ["Washer não encontrado."]})
+    res.status(404).json({ errors: ["Lavador não encontrado."]})
     return
   }
 

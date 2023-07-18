@@ -119,12 +119,19 @@ const AddWash = () => {
     return date < today;
   };
 
+  registerLocale("pt-BR", pt);
+  setDefaultLocale("pt-BR");
+
+// Filtra os horários com base no lavador selecionado
+const selectedWasher = washers.find((washer) => washer._id === washerId);
+const selectedWasherHours = selectedWasher ? selectedWasher.hour : [];
+
+// Ordena os horários em ordem crescente
+const sortedHours = [...selectedWasherHours].sort((a, b) => a.localeCompare(b));
+
   if (loading) {
     return <p>Carregando...</p>;
   }
-
-  registerLocale("pt-BR", pt);
-  setDefaultLocale("pt-BR");
 
   return (
     <div className="add-wash">
@@ -215,13 +222,11 @@ const AddWash = () => {
                   value={hour || ""}
                 >
                   <option>Escolha o horário</option>
-                  {washers.map((washer) =>
-                    washer.times.map((time) => (
-                      <option key={time.hour} value={time.hour}>
-                        {time.hour}
-                      </option>
-                    ))
-                  )}
+                  {sortedHours.map((hour) => (
+                    <option key={hour} value={hour}>
+                      {hour}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="add-button">

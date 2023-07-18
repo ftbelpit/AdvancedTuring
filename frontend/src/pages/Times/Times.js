@@ -118,7 +118,7 @@ const Times = () => {
                         value={hour || ""}
                       />
                       <div className="button-container-times">
-                        {!loadingWasher && <input type="submit" value="Enviar Avaliação" />}
+                        {!loadingWasher && <input type="submit" value="Adicionar" />}
                         {loadingWasher && <input type="submit" disabled value="Aguarde..." />}
                       </div>
                       {errorWasher && <Message msg={errorWasher} type="error" />}
