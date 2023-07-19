@@ -33,8 +33,6 @@ const AddWash = () => {
   const fabricanteParam = params.get("fabricanteParam");
   const modeloParam = params.get("modeloParam");
   const anoParam = params.get("anoParam");
-  const washerId = params.get("washerId");
-  const washerName = params.get("washerName");
 
   const { loading } = useSelector((state) => state.user);
   const { user: userAuth } = useSelector((state) => state.auth);
@@ -50,7 +48,7 @@ const AddWash = () => {
   const [fabricante, setFabricante] = useState(fabricanteParam || "");
   const [modelo, setModelo] = useState(modeloParam || "");
   const [ano, setAno] = useState(anoParam || "");
-  const [name, setName] = useState(washerName || "");
+  const [name, setName] = useState("");
   const [date, setDate] = useState("");
   const [hour, setHour] = useState("");
 
@@ -76,8 +74,7 @@ const AddWash = () => {
       ano,
       name,
       date,
-      hour,
-      washerId
+      hour
     };
 
     if (isWeekend(date) || isPastDate(date)) {
@@ -121,13 +118,6 @@ const AddWash = () => {
 
   registerLocale("pt-BR", pt);
   setDefaultLocale("pt-BR");
-
-// Filtra os horários com base no lavador selecionado
-const selectedWasher = washers.find((washer) => washer._id === washerId);
-const selectedWasherHours = selectedWasher ? selectedWasher.hour : [];
-
-// Ordena os horários em ordem crescente
-const sortedHours = [...selectedWasherHours].sort((a, b) => a.localeCompare(b));
 
   if (loading) {
     return <p>Carregando...</p>;
@@ -215,20 +205,28 @@ const sortedHours = [...selectedWasherHours].sort((a, b) => a.localeCompare(b));
                   <BsFillCalendarCheckFill className="date-icon" />
                 </div>
               </div>
-              <div className="add-wash-card">
-                <label>Horário</label>
-                <select
-                  onChange={(e) => setHour(e.target.value)}
-                  value={hour || ""}
-                >
-                  <option>Escolha o horário</option>
-                  {sortedHours.map((hour) => (
-                    <option key={hour} value={hour}>
-                      {hour}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {date && name && (
+                <div className="add-wash-card">
+                  <label>Horário</label>
+                  <select
+                    onChange={(e) => setHour(e.target.value)}
+                    value={hour || ""}
+                  >
+                    <option>Escolha o horário</option>
+                    {washers.map((washer) => {
+                      if (washer.name === name) {
+                        const sortedHours = [...washer.hour].sort((a, b) => a.localeCompare(b));
+                        return sortedHours.map((hour) => (
+                          <option key={hour} value={hour}>
+                            {hour}
+                          </option>
+                        ));
+                      }
+                      return null;
+                    })}
+                  </select>
+                </div>
+              )}
               <div className="add-button">
                 {!loadingWash && <input type="submit" value="Agendar" />}
                 {loadingWash && <input type="submit" disabled value="Aguarde..." />}

@@ -39,14 +39,14 @@ const Home = () => {
     }, 2000);
   };
 
-  const handleWashButtonClick = (washerId, washerName) => {
+  const handleWashButtonClick = () => {
     if (!selectedCar) {
       setShowPopup(true);
     } else {
       const { fabricante, modelo, ano } = selectedCar;
   
       // Combinar os parâmetros em uma única string
-      const params = `fabricanteParam=${encodeURIComponent(fabricante)}&modeloParam=${encodeURIComponent(modelo)}&anoParam=${encodeURIComponent(ano)}&washerId=${encodeURIComponent(washerId)}&washerName=${encodeURIComponent(washerName)}`;
+      const params = `fabricanteParam=${encodeURIComponent(fabricante)}&modeloParam=${encodeURIComponent(modelo)}&anoParam=${encodeURIComponent(ano)}`;
   
       resetComponentMessage();
   
@@ -194,7 +194,7 @@ const Home = () => {
                 <button
                   type="submit"
                   className="button-wash"
-                  onClick={() => handleWashButtonClick(washer._id, washer.name)}
+                  onClick={() => handleWashButtonClick()}
                 >
                   Lavar meu carro
                 </button>

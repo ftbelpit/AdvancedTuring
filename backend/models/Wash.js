@@ -37,6 +37,4 @@ washSchema.methods.checkDuplicate = async function () {
   return !!existingWash;
 };
 
-const Wash = mongoose.model('Wash', washSchema);
-
-module.exports = Wash
+const Wash = mongoose.model('Wash', washSchema)

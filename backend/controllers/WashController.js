@@ -19,11 +19,11 @@ const insertWash = async (req, res) => {
       modelo: { $regex: new RegExp(modelo, "i") },
       ano: { $regex: new RegExp(ano, "i") },
     });
-
+    
     const washer = await Washer.findOne({
       name: { $regex: new RegExp(name, "i") },
       hour: { $regex: new RegExp(hour, "i") }
-    });
+    });    
 
     if (!car) {
       return res.status(404).json({ errors: ["Carro não encontrado."] });
@@ -40,13 +40,13 @@ const insertWash = async (req, res) => {
 
     // Verifica se já existe uma lavagem com o mesmo lavador, horário e data
     const existingWash = await Wash.findOne({
-      washerId: washer._id,
+      "washer.name": name,
       "washer.hour": hour,
       date,
     });
 
     if (existingWash) {
-      return res.status(400).json({ errors: ["Já existe uma lavagem agendada com este lavador, horário e data."] });
+      return res.status(400).json({ errors: ["Este lavador, horário e data já foram escolhidos."] });
     }
 
     // Cria uma nova lavagem associada ao carro existente
@@ -65,7 +65,7 @@ const insertWash = async (req, res) => {
       userId: user._id,
       userName: user.name,
       date,
-    })
+    });
     
     // Se a lavagem for criada com sucesso, retorna os dados
     return res.status(201).json(newWash);
@@ -76,8 +76,6 @@ const insertWash = async (req, res) => {
     });
   }
 }
-
-
 
 const deleteWash = async (req, res) => {
   const { id } = req.params;

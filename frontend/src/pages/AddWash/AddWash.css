@@ -51,3 +51,8 @@
   transform: translateY(-50%);
   pointer-events: none;
 }
+
+.selected-hour {
+  background-color: black;
+  color: white; /* Define a cor do texto para garantir a legibilidade */
+}
