@@ -16,7 +16,6 @@ const washerSchema = new Schema(
   }
 );
 
-
 const Washer = mongoose.model("Washer", washerSchema);
 
 module.exports = Washer;
