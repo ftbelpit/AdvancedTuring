@@ -1,17 +1,17 @@
-const Washer = require("../models/Washer")
-const Admin = require("../models/Admin")
-const User = require("../models/User")
+const Washer = require("../models/Washer");
+const Admin = require("../models/Admin");
+const User = require("../models/User");
 
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
 // Insert a washer
-const insertWasher = async(req, res) => {
-  const { name, price } = req.body
-  const image = req.file.filename
+const insertWasher = async (req, res) => {
+  const { name, price } = req.body;
+  const image = req.file.filename;
 
-  const reqAdmin = req.admin
+  const reqAdmin = req.admin;
 
-  const admin = await Admin.findById(reqAdmin._id)
+  const admin = await Admin.findById(reqAdmin._id);
 
   // Create a washer
   const newWasher = await Washer.create({
@@ -19,79 +19,75 @@ const insertWasher = async(req, res) => {
     name,
     price,
     adminId: admin._id,
-    adminName: admin.name_admin
-  })
+    adminName: admin.name_admin,
+  });
 
   // If washer was created successfully, return data
-  if(!newWasher) {
+  if (!newWasher) {
     res.status(422).json({
-      errors: ["Houve um problema, por favor tente novamente mais tarde."], 
-    })
-    return
+      errors: ["Houve um problema, por favor tente novamente mais tarde."],
+    });
+    return;
   }
 
-  res.status(201).json(newWasher)
-}
+  res.status(201).json(newWasher);
+};
 
-// Remove a photo from DB
-const deleteWasher = async(req, res) => {
-  const {id} = req.params 
+// Remove a washer
+const deleteWasher = async (req, res) => {
+  const { id } = req.params;
 
-  const reqAdmin = req.admin 
+  const reqAdmin = req.admin;
   try {
-    const washer = await Washer.findById(new mongoose.Types.ObjectId(id))
+    const washer = await Washer.findById(new mongoose.Types.ObjectId(id));
 
-    // Check if photo exists
-    if(!washer) {
-      res.status(404).json({ errors: ["Lavador não encontrado!"] })
-      return
+    // Check if washer exists
+    if (!washer) {
+      res.status(404).json({ errors: ["Lavador não encontrado!"] });
+      return;
     }
 
-    // Check if photo belongs to user
-    if(!washer.adminId.equals(reqAdmin._id)) {
-      res
-        .status(422)
-        .json({ 
-          errors: ["Ocorreu um erro, por favor tente novamente mais tarde."]
-        })
+    // Check if washer belongs to admin
+    if (!washer.adminId.equals(reqAdmin._id)) {
+      res.status(422).json({
+        errors: ["Ocorreu um erro, por favor tente novamente mais tarde."],
+      });
+      return;
     }
 
-    await Washer.findByIdAndDelete(washer._id)
+    await Washer.findByIdAndDelete(washer._id);
 
-    res
-      .status(200)
-      .json({ 
-        id: Washer._id, message: "Lavador excluído com sucesso com sucesso." 
-      })
+    res.status(200).json({
+      id: washer._id,
+      message: "Lavador excluído com sucesso.",
+    });
   } catch (error) {
-      res.status(404).json({ errors: ["Foto não encontrada!"] })
-      return
+    res.status(404).json({ errors: ["Lavador não encontrado!"] });
+    return;
   }
-}
+};
 
 // Get all washers
-const getAllWashers = async(req, res) => {
-  const washers = await Washer.find({})
-    .sort([["createdAt", -1]])
-    .exec()
+const getAllWashers = async (req, res) => {
+  const washers = await Washer.find({}).sort([["createdAt", -1]]).exec();
 
-  return res.status(200).json(washers)
-}
+  return res.status(200).json(washers);
+};
 
 // Get washer by id
 const getWasherById = async (req, res) => {
-  const {id} = req.params
+  const { id } = req.params;
 
-  const washer = await Washer.findById(new mongoose.Types.ObjectId(id))
+  const washer = await Washer.findById(new mongoose.Types.ObjectId(id));
 
   // Check if washer exists
-  if(!washer) {
-    res.status(404).json({ errors: ["Lavador não encontrado."]})
-    return
+  if (!washer) {
+    res.status(404).json({ errors: ["Lavador não encontrado."] });
+    return;
   }
 
-  res.status(200).json(washer)
-}
+  res.status(200).json(washer);
+};
 
 // Assessments functionality
 const assessmentWasher = async (req, res) => {
@@ -126,39 +122,10 @@ const assessmentWasher = async (req, res) => {
   });
 };
 
-// adicionar horários para o lavador
-const timesWasher = async (req, res) => {
-  const { id } = req.params;
-  const { hour } = req.body;
-
-  const washer = await Washer.findById(id);
-
-  if (!washer) {
-    res.status(404).json({ errors: ["Lavador não encontrado"] });
-    return;
-  }
-
-  // Verificar se o horário já existe no array
-  if (washer.hour.includes(hour)) {
-    res.status(400).json({ errors: [`O horário ${hour} já existe na lista`] });
-    return;
-  }
-
-  washer.hour.push(hour);
-
-  await washer.save();
-
-  res.status(200).json({
-    hour: washer.hour,
-    message: "Horário adicionado com sucesso!",
-  });
-}
-
 module.exports = {
   insertWasher,
   deleteWasher,
   getAllWashers,
   getWasherById,
   assessmentWasher,
-  timesWasher
-};
+}

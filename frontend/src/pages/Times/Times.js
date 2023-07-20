@@ -1,8 +1,13 @@
-import "./Times.css";
+import "./Times.css"
 
 import { useEffect, useRef, useState } from "react";
+
 import { useSelector, useDispatch } from "react-redux";
-import { getWasher, resetMessage, times } from "../../slices/washerSlice";
+
+import { getWasher, resetMessage } from "../../slices/washerSlice";
+
+import { addTimeToWasher } from "../../slices/hoursWasherSlice";
+
 import { useParams } from "react-router-dom";
 
 import WasherItem from "../../components/WasherItem";
@@ -17,11 +22,15 @@ const Times = () => {
   const { loading } = useSelector((state) => state.admin);
 
   const {
-    washer,
-    loading: loadingWasher,
-    message: messageWasher,
-    error: errorWasher,
+    washer
   } = useSelector((state) => state.washer);
+
+  const {
+    hours,
+    loading: loadingHoursWasher,
+    message: messageHoursWasher,
+    error: errorHoursWasher,
+  } = useSelector((state) => state.hoursWasher);
 
   const [showPopup, setShowPopup] = useState(false);
   const [hour, setHour] = useState("");
@@ -47,11 +56,10 @@ const Times = () => {
   }, []);
 
   useEffect(() => {
-    if (messageWasher) {
-      // Atualiza o estado washer com os novos dados após a adição do horário
+    if (messageHoursWasher) {
       dispatch(getWasher(id));
     }
-  }, [dispatch, id, messageWasher]);
+  }, [dispatch, id, messageHoursWasher]);
 
   const resetComponentMessage = () => {
     setTimeout(() => {
@@ -64,10 +72,10 @@ const Times = () => {
 
     const timeData = {
       hour: hour,
-      id: washer._id,
+      washerId: washer._id,
     };
 
-    dispatch(times(timeData));
+    dispatch(addTimeToWasher(timeData));
 
     setHour("");
 
@@ -95,7 +103,7 @@ const Times = () => {
         )}
       </div>
       <div>
-        {washer.hour && (
+        {hours && (
           <>
             {showPopup && (
               <div
@@ -118,27 +126,25 @@ const Times = () => {
                         value={hour || ""}
                       />
                       <div className="button-container-times">
-                        {!loadingWasher && <input type="submit" value="Adicionar" />}
-                        {loadingWasher && <input type="submit" disabled value="Aguarde..." />}
+                        {!loadingHoursWasher && <input type="submit" value="Adicionar" />}
+                        {loadingHoursWasher && <input type="submit" disabled value="Aguarde..." />}
                       </div>
-                      {errorWasher && <Message msg={errorWasher} type="error" />}
-                      {messageWasher && <Message msg={messageWasher} type="success" />}
+                      {errorHoursWasher && <Message msg={errorHoursWasher} type="error" />}
+                      {messageHoursWasher && <Message msg={messageHoursWasher} type="success" />}
                     </form>
                   </div>
                 </div>
               </div>
             )}
             <h3 className="horarios">Segunda a sexta</h3>
-            {washer.hour && washer.hour.length > 0 ? (
-              [...washer.hour] // Cria uma cópia do array original
-                .sort((a, b) => parseInt(a, 10) - parseInt(b, 10)) // Ordena os horários do menor ao maior
-                .map((hour, index) => (
-                  <div className="time-user" key={`${hour}-${index}`}>
-                    <div className="time-hours">
-                      <span className="hours">{hour}</span>
-                    </div>
+            {hours.length > 0 ? (
+              hours.map((hour, index) => (
+                <div className="time-user" key={`${hour}-${index}`}>
+                  <div className="time-hours">
+                    <span className="hours">{hour}</span>
                   </div>
-                ))
+                </div>
+              ))
             ) : (
               <p>Nenhum horário encontrado.</p>
             )}

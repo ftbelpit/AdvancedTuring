@@ -22,8 +22,7 @@ const insertWash = async (req, res) => {
     
     const washer = await Washer.findOne({
       name: { $regex: new RegExp(name, "i") },
-      hour: { $regex: new RegExp(hour, "i") }
-    });    
+    });
 
     if (!car) {
       return res.status(404).json({ errors: ["Carro não encontrado."] });
@@ -34,7 +33,12 @@ const insertWash = async (req, res) => {
     }
 
     // Verifica se o horário está presente no array de horários do lavador
-    if (!washer.hour.includes(hour)) {
+    const washerAvailableHour = await HoursWasher.findOne({
+      washerId: washer._id,
+      hour: { $regex: new RegExp(hour, "i") },
+    });
+
+    if (!washerAvailableHour) {
       return res.status(400).json({ errors: ["O horário especificado não está disponível para este lavador."] });
     }
 

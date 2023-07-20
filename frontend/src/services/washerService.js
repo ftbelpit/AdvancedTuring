@@ -60,27 +60,11 @@ const assessments = async(data, id, token) => {
   }
 }
 
-// add time to a washer
-const times = async(data, id, token_admin) => {
-  const config = requestConfig("PUT", data, token_admin)
-
-  try {
-    const res = await fetch(api + "/washers/times/" + id, config)
-      .then((res) => res.json())
-      .catch((err) => err)
-
-    return res
-  } catch (error) {
-    console.log(error)
-  }
-}
-
 const washerService = {
   insertWasher,
   getWasher,
   getWashers,
-  assessments,
-  times
+  assessments
 }
 
 export default washerService

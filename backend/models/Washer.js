@@ -9,7 +9,6 @@ const washerSchema = new Schema(
     price: String,
     adminId: mongoose.ObjectId,
     adminName: String,
-    hour: Array
   },
   {
     timestamps: true,
