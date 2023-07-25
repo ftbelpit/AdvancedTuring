@@ -1,6 +1,6 @@
 const {body} = require("express-validator")
 
-const timesValidation = () => {
+const hoursValidation = () => {
   return [
     body("hour")
       .isString()
@@ -10,6 +10,7 @@ const timesValidation = () => {
   ];
 };
 
+
 module.exports = {
-  timesValidation
+  hoursValidation
 }

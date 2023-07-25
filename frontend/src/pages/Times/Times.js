@@ -1,14 +1,20 @@
-import "./Times.css"
+import "./Times.css";
+
+import { FiDelete } from "react-icons/fi"
 
 import { useEffect, useRef, useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { getWasher, resetMessage } from "../../slices/washerSlice";
-
-import { addTimeToWasher } from "../../slices/hoursWasherSlice";
-
 import { useParams } from "react-router-dom";
+
+import { getWasher } from "../../slices/washerSlice";
+import { 
+  insertHour, 
+  getHours, 
+  deleteHour,
+  resetMessage
+} from "../../slices/hourSlice";
 
 import WasherItem from "../../components/WasherItem";
 import Message from "../../components/Message";
@@ -27,10 +33,10 @@ const Times = () => {
 
   const {
     hours,
-    loading: loadingHoursWasher,
-    message: messageHoursWasher,
-    error: errorHoursWasher,
-  } = useSelector((state) => state.hoursWasher);
+    loading: loadingHour,
+    message: messageHour,
+    error: errorHour,
+  } = useSelector((state) => state.hour);
 
   const [showPopup, setShowPopup] = useState(false);
   const [hour, setHour] = useState("");
@@ -39,6 +45,7 @@ const Times = () => {
 
   useEffect(() => {
     dispatch(getWasher(id));
+    dispatch(getHours(id))
   }, [dispatch, id]);
 
   useEffect(() => {
@@ -56,10 +63,10 @@ const Times = () => {
   }, []);
 
   useEffect(() => {
-    if (messageHoursWasher) {
-      dispatch(getWasher(id));
+    if (messageHour || deleteHour) {
+      dispatch(getHours(id));
     }
-  }, [dispatch, id, messageHoursWasher]);
+  }, [dispatch, id, messageHour]);
 
   const resetComponentMessage = () => {
     setTimeout(() => {
@@ -72,20 +79,24 @@ const Times = () => {
 
     const timeData = {
       hour: hour,
-      washerId: washer._id,
+      id: washer._id
     };
 
-    dispatch(addTimeToWasher(timeData));
+    dispatch(insertHour(timeData)); // O washerId já vem da URL
 
     setHour("");
 
-    resetComponentMessage();
-    // setShowPopup(false);
-  };
+    resetComponentMessage()
+  }
 
   const handleRateButtonClick = () => {
     setShowPopup(true);
   };
+
+  const handleDelete = (id) => {
+    dispatch(deleteHour(id))
+    resetComponentMessage()
+  }
 
   if (loading) {
     return <p>Carregando...</p>;
@@ -126,31 +137,38 @@ const Times = () => {
                         value={hour || ""}
                       />
                       <div className="button-container-times">
-                        {!loadingHoursWasher && <input type="submit" value="Adicionar" />}
-                        {loadingHoursWasher && <input type="submit" disabled value="Aguarde..." />}
-                      </div>
-                      {errorHoursWasher && <Message msg={errorHoursWasher} type="error" />}
-                      {messageHoursWasher && <Message msg={messageHoursWasher} type="success" />}
+                        {!loadingHour && <input type="submit" value="Adicionar" />}
+                        {loadingHour && <input type="submit" disabled value="Aguarde..." />}
+                      </div>     
+                      {errorHour && <Message msg={errorHour} type="error" />}
+                      {messageHour && <Message msg={messageHour} type="success" />}                
                     </form>
                   </div>
                 </div>
               </div>
             )}
-            <h3 className="horarios">Segunda a sexta</h3>
-            {hours.length > 0 ? (
-              hours.map((hour, index) => (
-                <div className="time-user" key={`${hour}-${index}`}>
-                  <div className="time-hours">
-                    <span className="hours">{hour}</span>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p>Nenhum horário encontrado.</p>
-            )}
+            <div className="washer-hours">
+              <h3 className="horarios">Segunda a sexta</h3>
+              {hours && hours.length > 0 ? (
+                hours
+                  .slice()
+                  .sort((a, b) => a.hour.localeCompare(b.hour))
+                  .map((hour, index) => (
+                    <div className="time-user" key={index}> {/* Utilizando o índice como chave */}
+                      <div className="time-hours">
+                        <span className="hours">{hour.hour}</span>
+                        <FiDelete onClick={() => handleDelete(hour._id)} />
+                      </div>
+                    </div>
+                  ))
+              ) : (
+                <p>Nenhum horário encontrado.</p>
+              )}
+            </div>
           </>
         )}
       </div>
+      
     </div>
   );
 };

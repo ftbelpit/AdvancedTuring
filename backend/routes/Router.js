@@ -6,7 +6,7 @@ router.use("/api/users", require("./UserRoutes"))
 router.use("/api/cars", require("./CarRoutes"))
 router.use("/api/washers", require("./WasherRoutes"))
 router.use("/api/washes", require("./WashRoutes"))
-router.use("/api/hoursWashers", require("./HoursWasherRoutes"))
+router.use("/api/hours", require("./HoursRoutes"))
 
 // test route
 router.get("/", (req, res) => {

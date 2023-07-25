@@ -7,7 +7,7 @@ import adminReducer from "./slices/adminSlice"
 import adminAuthReducer from "./slices/adminAuthSlice"
 import washerReducer from "./slices/washerSlice"
 import washReducer from "./slices/washSlice"
-import hoursWasherReducer from "./slices/hoursWasherSlice"
+import hourReducer from "./slices/hourSlice"
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +18,6 @@ export const store = configureStore({
     authAdmin: adminAuthReducer,
     washer: washerReducer,
     wash: washReducer,
-    hoursWasher: hoursWasherReducer
+    hour: hourReducer
   },
 })

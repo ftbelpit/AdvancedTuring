@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const hoursWasher = new Schema(
+const hourSchema = new Schema(
   {
     washerId: mongoose.ObjectId,
     hour: String
@@ -11,6 +11,6 @@ const hoursWasher = new Schema(
   }
 );
 
-const HoursWasher = mongoose.model("HoursWasher", hoursWasher);
+const Hour = mongoose.model("Hour", hourSchema);
 
-module.exports = HoursWasher;
+module.exports = Hour;

@@ -3,13 +3,13 @@ const router = express.Router();
 
 // Controller
 const { 
-  addTimeToWasher, 
-  removeTimeFromWasher,
-  getHoursWasher, 
-} = require("../controllers/HoursWasherController");
+  insertHour, 
+  deleteHour, 
+  getHours
+} = require("../controllers/HoursController");
 
 // Middlewares
-const { timesValidation } = require("../middlewares/hoursWasherValidation");
+const { hoursValidation } = require("../middlewares/hoursValidation");
 const authGuardAdmin = require("../middlewares/authGuardAdmin");
 const validate = require("../middlewares/handleValidation");
 
@@ -17,15 +17,16 @@ const validate = require("../middlewares/handleValidation");
 router.post(
   "/washer/:washerId",
   authGuardAdmin,
-  timesValidation(),
+  hoursValidation(),
   validate,
-  addTimeToWasher
+  insertHour
 );
 
 // Remover horário de um lavador
-router.delete("/washer/:washerId", removeTimeFromWasher);
+router.delete("/washer/:id", authGuardAdmin, deleteHour);
 
 // Obter horários de um lavador
-router.get("/washer/:washerId", getHoursWasher);
+router.get("/washer/:washerId", getHours);
+
 
 module.exports = router
