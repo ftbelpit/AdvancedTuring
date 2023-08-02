@@ -7,7 +7,7 @@ const initialState = {
   error: false,
   success: false,
   loading: false,
-  message: null,
+  message: null
 };
 
 // Adicionar horário a um lavador
@@ -57,6 +57,21 @@ export const getHours = createAsyncThunk(
   "hour/getall",
   async (washerId, thunkAPI) => {
     const data = await hourService.getHours(washerId);
+
+    // Check for errors
+    if (data.errors) {
+      return thunkAPI.rejectWithValue(data.errors[0]);
+    }
+
+    return data;
+  }
+);
+
+export const getAvailableHours = createAsyncThunk(
+  "hour/getAvailableHours",
+  async (timeData, thunkAPI) => {
+    const { washerId, date } = timeData;
+    const data = await hourService.getAvailableHours(washerId, date);
 
     // Check for errors
     if (data.errors) {
@@ -127,7 +142,21 @@ export const hourSlice = createSlice({
       .addCase(getHours.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(getAvailableHours.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getAvailableHours.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.hours = action.payload;
+      })
+      .addCase(getAvailableHours.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
   },
 });
 

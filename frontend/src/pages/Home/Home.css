@@ -180,3 +180,24 @@ select:hover {
   background-color: rgba(22, 22, 22, 0.959); /* Cinza claro com opacidade */
   z-index: 998;
 }
+
+.date-input {
+  position: relative;
+}
+
+.date-input input {
+  border-radius: 10px;
+  padding: 7px;
+  background-color: #8FF2FF;
+  border: 1px solid #000;
+  color: #000;
+  margin-bottom: .6em;
+}
+
+.date-icon {
+  position: absolute;
+  top: 35%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}

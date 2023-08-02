@@ -22,7 +22,7 @@
 
 .add-wash-card input,
 .add-wash-card select {
-  width: 200px;
+  width: 195px;
   border-radius: 10px;
   padding: 7px;
   background-color: #8FF2FF;
@@ -38,18 +38,6 @@
 .add-wash-card input::placeholder{
   color: #000;
   opacity: 1;
-}
-
-.date-input {
-  position: relative;
-}
-
-.date-icon {
-  position: absolute;
-  top: 40%;
-  right: 10px;
-  transform: translateY(-50%);
-  pointer-events: none;
 }
 
 .selected-hour {

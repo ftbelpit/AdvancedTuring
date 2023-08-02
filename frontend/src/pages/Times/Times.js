@@ -129,10 +129,10 @@ const Times = () => {
                   <div className="popup-content-times">
                     <h2>Adicionar Horários</h2>
                     <form onSubmit={handleTime}>
-                      <label>Horários:</label>
+                      <label>Horário:</label>
                       <input
                         type="text"
-                        placeholder="Insira os horários"
+                        placeholder="Insira o horário"
                         onChange={(e) => setHour(e.target.value)}
                         value={hour || ""}
                       />

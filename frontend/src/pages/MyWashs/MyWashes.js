@@ -1,6 +1,6 @@
 import "./MyWashes.css"
 
-import { format } from 'date-fns';
+import { format, parse, getHours } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 import Message from "../../components/Message";
@@ -47,6 +47,14 @@ const MyWashes = () => {
     resetComponentMessage()
   }
 
+  const formatDate = (dateString) => {
+    const [day, month, year] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    return format(date, "d 'de' MMMM 'de' yyyy", {
+      locale: ptBR,
+    });
+  };
+
   if (loading) {
     return <p>Carregando...</p>
   }
@@ -59,16 +67,18 @@ const MyWashes = () => {
       <div className="wash-container">
         {washes && washes.length > 0 ? ( 
           washes.map((wash) => {
-        const washDate = new Date(wash.date);
-        const washTime = wash.washer.hour.split(":");
-        const washDateTime = new Date(washDate.getFullYear(), washDate.getMonth(), washDate.getDate(), washTime[0], washTime[1]);
+            const washDate = parse(wash.date, 'dd-MM-yyyy', new Date());
+            const washTime = getHours(parse(wash.hour, 'HH:mm', new Date()));
+          
+            // Combine date and time to get the full datetime of the wash
+            const washDateTime = new Date(washDate);
+            washDateTime.setHours(washTime);
+          
+            // Check if the wash datetime is in the past
+            const washIsPast = washDateTime > currentDate;
 
-        const dataFormatada = format(washDate, "d 'de' MMMM 'de' yyyy", {
-          locale: ptBR,
-        });
-
-        const washIsPast = washDateTime > currentDate;  
-
+            const dataFormatada = formatDate(wash.date);
+            
           return (
             <div className="wash-card" key={wash._id}>
               <div className="wash-info">
@@ -101,7 +111,7 @@ const MyWashes = () => {
                 )}      
               </div>
               <span className="wash-date">  
-                {dataFormatada} às {wash.washer.hour}
+                {dataFormatada} às {wash.hour}
               </span>
             </div>
           )

@@ -1,10 +1,11 @@
 import "./AddWash.css";
 
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+// import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
 
-import { registerLocale, setDefaultLocale } from "react-datepicker";
-import pt from "date-fns/locale/pt-BR";
+// import { registerLocale, setDefaultLocale } from "react-datepicker";
+// import pt from "date-fns/locale/pt-BR";
+import { format, parse } from "date-fns";
 
 // components
 import Message from "../../components/Message";
@@ -15,11 +16,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 // redux
-import { insertWash, resetMessage } from "../../slices/washSlice";
+import { insertWash,  resetMessage } from "../../slices/washSlice";
 import { getWashers } from "../../slices/washerSlice";
 import { getUserCars } from "../../slices/carSlice";
+import { getHours, getAvailableHours } from "../../slices/hourSlice";
 
-import {BsFillCalendarCheckFill} from "react-icons/bs"
+// import {BsFillCalendarCheckFill} from "react-icons/bs"
 
 const AddWash = () => {
   const { id } = useParams();
@@ -33,10 +35,14 @@ const AddWash = () => {
   const fabricanteParam = params.get("fabricanteParam");
   const modeloParam = params.get("modeloParam");
   const anoParam = params.get("anoParam");
+  const washerNameParam = params.get("washerNameParam");
+  const washerIdParam = params.get("washerIdParam");
+  const dateParam = params.get("dateParam");
 
   const { loading } = useSelector((state) => state.user);
   const { user: userAuth } = useSelector((state) => state.auth);
   const {
+    washes,
     loading: loadingWash,
     message: messageWash,
     error: errorWash,
@@ -44,20 +50,16 @@ const AddWash = () => {
 
   const { cars } = useSelector((state) => state.car);
   const { washers } = useSelector((state) => state.washer);
+  const { hours } = useSelector((state) => state.hour);
 
   const [fabricante, setFabricante] = useState(fabricanteParam || "");
   const [modelo, setModelo] = useState(modeloParam || "");
   const [ano, setAno] = useState(anoParam || "");
-  const [name, setName] = useState("");
-  const [date, setDate] = useState("");
+  const [name, setName] = useState(washerNameParam || "");
+  const [date, setDate] = useState(dateParam || "");
   const [hour, setHour] = useState("");
 
   const newWashForm = useRef();
-
-  useEffect(() => {
-    dispatch(getUserCars(id));
-    dispatch(getWashers());
-  }, [dispatch, id]);
 
   const resetComponentMessage = () => {
     setTimeout(() => {
@@ -65,59 +67,63 @@ const AddWash = () => {
     }, 2000);
   };
 
+  useEffect(() => {
+    dispatch(getUserCars(id));
+    dispatch(getWashers());
+    dispatch(getHours(washerIdParam))
+  }, [dispatch, id, washerIdParam]);
+
+  useEffect(() => {
+    // Verifique se há uma mensagem de sucesso (messageWash) e navegue para a página de lavagens após 2 segundos
+    if (messageWash) {
+      setTimeout(() => {
+        navigate(`/washes/${userAuth._id}`);
+        setFabricante("");
+        setModelo("");
+        setAno("");
+        setName("");
+        setDate("");
+        setHour("");
+      }, 2000); // 2000 milissegundos = 2 segundos
+    }
+  }, [messageWash, navigate, userAuth._id]);
+
+  useEffect(() => {
+    if (name && date) {
+      dispatch(getAvailableHours({ washerId: washerIdParam, date: dateParam }));
+    }
+  }, [dispatch, name, date, dateParam, washerIdParam]);   
+    
+  // Aqui vêm as alterações para lidar com os horários utilizados
+  const filterUsedHours = () => {
+    // Filtra os horários já utilizados pelo lavador selecionado
+    const usedHours = washes
+      .filter((wash) => wash.washerId === washerIdParam && wash.date === dateParam)
+      .map((wash) => wash.hour);
+  
+    return hours.filter((hour) => !usedHours.includes(hour.hour));
+  };  
+  
   const submitHandle = (e) => {
     e.preventDefault();
-
+  
     const washData = {
       fabricante,
       modelo,
       ano,
       name,
       date,
-      hour
+      hour,
+      washerId: washerIdParam,
     };
-
-    if (isWeekend(date) || isPastDate(date)) {
-      // Ignora a submissão se a data for inválida
-      return;
-    }
-
+  
     dispatch(insertWash(washData));
-
-    setFabricante("")
-    setModelo("")
-    setAno("")
-    setName("")
-    setDate("")
-    setHour("")
-
+  
     resetComponentMessage();
-  };
+  };  
 
-  useEffect(() => {
-    if (messageWash) {
-      setTimeout(() => {
-        navigate(`/washes/${userAuth._id}`);
-      }, 2000); // 2000 milliseconds = 2 seconds
-    }
-  }, [messageWash, navigate, userAuth._id]);
-
-  const isWeekend = (dateString) => {
-    const date = new Date(dateString);
-    const day = date.getDay();
-    return day === 0 || day === 6; // 0 representa domingo, 6 representa sábado
-  };
-
-  // Função para verificar se uma data é anterior à data atual
-  const isPastDate = (dateString) => {
-    const date = new Date(dateString);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Define a hora atual como 00:00:00 para considerar apenas a data
-    return date < today;
-  };
-
-  registerLocale("pt-BR", pt);
-  setDefaultLocale("pt-BR");
+  // registerLocale("pt-BR", pt);
+  // setDefaultLocale("pt-BR");
 
   if (loading) {
     return <p>Carregando...</p>;
@@ -142,7 +148,7 @@ const AddWash = () => {
                 >
                   <option value="">Escolha o fabricante do carro</option>
                   {cars.map((car) => (
-                    <option key={car._id} value={car.fabricante}>
+                    <option key={car._id} value={car.fabricante} >
                       {car.fabricante.charAt(0).toUpperCase() +
                         car.fabricante.slice(1)}
                     </option>
@@ -193,40 +199,30 @@ const AddWash = () => {
               </div>
               <div className="add-wash-card">
                 <label>Data</label>
-                <div className="date-input">
-                  <DatePicker
-                    placeholderText="Escolha a data"
-                    selected={date}
-                    onChange={(date) => setDate(date)}
-                    minDate={new Date()}
-                    filterDate={(date) => !isWeekend(date)}
-                    dateFormat="dd/MM/yyyy"
-                  />
-                  <BsFillCalendarCheckFill className="date-icon" />
-                </div>
+                <input 
+                  type="text"
+                  onChange={(e) => setDate(e.target.value)}
+                  value={date ? format(parse(date, "dd-MM-yyyy", new Date()), "dd/MM/yyyy") : ""}
+                />
               </div>
-              {date && name && (
-                <div className="add-wash-card">
-                  <label>Horário</label>
-                  <select
-                    onChange={(e) => setHour(e.target.value)}
-                    value={hour || ""}
-                  >
-                    <option>Escolha o horário</option>
-                    {washers.map((washer) => {
-                      if (washer.name === name) {
-                        const sortedHours = [...washer.hour].sort((a, b) => a.localeCompare(b));
-                        return sortedHours.map((hour) => (
-                          <option key={hour} value={hour}>
-                            {hour}
-                          </option>
-                        ));
-                      }
-                      return null;
-                    })}
-                  </select>
-                </div>
-              )}
+              <div className="add-wash-card">
+                <label>Horário</label>
+                <select
+                  onChange={(e) => setHour(e.target.value)}
+                  value={hour || ""}
+                >
+                  <option>Escolha o horário</option>
+                  {hours && hours.length > 0 ? (
+                    filterUsedHours().map((hour, index) => (
+                      <option key={index} value={hour.hour}>
+                        {hour.hour}
+                      </option>
+                    ))
+                  ) : (
+                    <option disabled>Nenhum horário encontrado.</option>
+                  )}
+                </select>
+              </div>        
               <div className="add-button">
                 {!loadingWash && <input type="submit" value="Agendar" />}
                 {loadingWash && <input type="submit" disabled value="Aguarde..." />}

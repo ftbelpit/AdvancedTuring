@@ -1,5 +1,6 @@
 const Hour = require("../models/Hour")
 const Washer = require("../models/Washer")
+const Wash = require("../models/Wash");
 
 // Add time to a washer
 const insertHour = async (req, res) => {
@@ -82,8 +83,38 @@ const getHours = async (req, res) => {
   }
 };
 
+const getAvailableHours = async (req, res) => {
+  const { washerId, date } = req.params;
+
+  try {
+    // Verificar se o lavador existe no banco de dados
+    const washer = await Washer.findById(washerId);
+    if (!washer) {
+      return res.status(404).json({ errors: ["Lavador não encontrado."] });
+    }
+
+    // Obter todos os horários cadastrados para o lavador
+    const allHours = await Hour.find({ washerId });
+
+    // Obter todos os agendamentos para o lavador e data especificados
+    const bookings = await Wash.find({ washerId, date });
+
+    // Criar um conjunto (Set) com os horários já agendados
+    const bookedHoursSet = new Set(bookings.map((booking) => booking.hourId.toString()));
+
+    // Filtrar os horários disponíveis
+    const availableHours = allHours.filter((hour) => !bookedHoursSet.has(hour._id.toString()));
+
+    res.status(200).json(availableHours);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ errors: ["Houve um problema ao obter os horários disponíveis."] });
+  }
+};
+
 module.exports = {
   insertHour,
   deleteHour,
-  getHours
+  getHours,
+  getAvailableHours
 };

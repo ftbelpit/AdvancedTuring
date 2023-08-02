@@ -97,7 +97,7 @@ const washService = {
   getWasherWashes,
   deleteWash,
   getWash,
-  getWashes,
+  getWashes
 }
 
 export default washService

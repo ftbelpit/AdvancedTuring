@@ -1,5 +1,13 @@
 import "./Home.css";
 
+import DatePicker from "react-datepicker";
+
+import { registerLocale } from "react-datepicker";
+import ptBR from "date-fns/locale/pt-BR";
+import "react-datepicker/dist/react-datepicker.css";
+
+import { BsFillCalendarCheckFill } from "react-icons/bs"
+
 // hooks
 import { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,10 +20,18 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 
 import WasherItem from "../../components/WasherItem";
 
+const formatDateToDDMMYYYY = (date) => {
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
+};
+
 const Home = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState("name");
   const [selectedCar, setSelectedCar] = useState(null);
+  const [date, setDate] = useState("")
 
   const { user } = useSelector((state) => state.auth);
   const { loading } = useSelector((state) => state.user);
@@ -39,14 +55,16 @@ const Home = () => {
     }, 2000);
   };
 
-  const handleWashButtonClick = () => {
+  const handleWashButtonClick = (washerName, washerId) => {
     if (!selectedCar) {
       setShowPopup(true);
     } else {
       const { fabricante, modelo, ano } = selectedCar;
+
+      const formattedDate = formatDateToDDMMYYYY(new Date(date));
   
       // Combinar os parâmetros em uma única string
-      const params = `fabricanteParam=${encodeURIComponent(fabricante)}&modeloParam=${encodeURIComponent(modelo)}&anoParam=${encodeURIComponent(ano)}`;
+      const params = `fabricanteParam=${encodeURIComponent(fabricante)}&modeloParam=${encodeURIComponent(modelo)}&anoParam=${encodeURIComponent(ano)}&washerNameParam=${encodeURIComponent(washerName)}&washerIdParam=${encodeURIComponent(washerId)}&dateParam=${encodeURIComponent(formattedDate)}`;
   
       resetComponentMessage();
   
@@ -54,6 +72,8 @@ const Home = () => {
       navigate(`/addwash/${user._id}?${params}`);
     }
   }  
+
+  registerLocale("pt-BR", ptBR);
 
   const closePopup = () => {
     setShowPopup(false);
@@ -104,6 +124,11 @@ const Home = () => {
     return washersCopy;
   }, [washers, selectedOrder]);
 
+  const isWeekend = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDay();
+    return day === 0 || day === 6; // 0 representa domingo, 6 representa sábado
+  };
 
   if (loading) {
     return <p>Carregando...</p>;
@@ -140,6 +165,20 @@ const Home = () => {
               ))}
           </select>
         </div>
+        {selectedCar && (
+          <div className="date-input">
+            <DatePicker
+              placeholderText="Escolha a data"
+              selected={date}
+              onChange={(date) => setDate(date)}
+              minDate={new Date()}
+              filterDate={(date) => !isWeekend(date)}
+              dateFormat="dd-MM-yyyy" // Atualizado para o formato "dd-MM-yyyy"
+              locale="pt-BR"
+            />
+            <BsFillCalendarCheckFill className="date-icon" />
+          </div>
+        )}
         <div className="select2">
           <span>Ordenar por:</span>
           <select
@@ -194,7 +233,7 @@ const Home = () => {
                 <button
                   type="submit"
                   className="button-wash"
-                  onClick={() => handleWashButtonClick()}
+                  onClick={() => handleWashButtonClick(washer.name, washer._id)}
                 >
                   Lavar meu carro
                 </button>

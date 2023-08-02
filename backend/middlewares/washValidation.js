@@ -1,6 +1,5 @@
 const { body } = require("express-validator");
 const moment = require("moment");
-const Wash = require("../models/Wash");
 
 const washInsertValidation = () => {
   return [

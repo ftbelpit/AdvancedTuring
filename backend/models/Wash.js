@@ -10,32 +10,19 @@ const washSchema = new Schema(
     },
     washer: {
       name: String,
-      hour: String
     },
+    hour: String,
+    date: String,
     washerId: mongoose.ObjectId,
+    hourId: mongoose.ObjectId, // Novo campo para armazenar o ID da hora selecionada
     userId: mongoose.ObjectId,
     userName: String,
     washerPrice: String,
-    date: {
-      type: Date,
-      default: Date.now,
-    },
-    
   },
   {
     timestamps: true,
   }
 );
-
-washSchema.methods.checkDuplicate = async function () {
-  const existingWash = await mongoose.model('Wash').findOne({
-    washerId: this.washerId,
-    date: this.date,
-    'washer.hour': this.washer.hour
-  });
-
-  return !!existingWash;
-};
 
 const Wash = mongoose.model('Wash', washSchema);
 

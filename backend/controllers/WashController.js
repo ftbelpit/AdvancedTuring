@@ -2,6 +2,7 @@ const User = require("../models/User");
 const Car = require("../models/Car");
 const Washer = require("../models/Washer");
 const Wash = require("../models/Wash");
+const Hour = require("../models/Hour");
 
 const mongoose = require("mongoose");
 
@@ -24,6 +25,11 @@ const insertWash = async (req, res) => {
       name: { $regex: new RegExp(name, "i") },
     });
 
+    const availableHour = await Hour.findOne({
+      hour: { $regex: new RegExp(hour, "i") },
+      washerId: washer._id, // Verifica se o ID do lavador associado ao horário é o mesmo que o lavador selecionado
+    });
+
     if (!car) {
       return res.status(404).json({ errors: ["Carro não encontrado."] });
     }
@@ -32,25 +38,19 @@ const insertWash = async (req, res) => {
       return res.status(404).json({ errors: ["Lavador não encontrado."] });
     }
 
-    // Verifica se o horário está presente no array de horários do lavador
-    const washerAvailableHour = await HoursWasher.findOne({
-      washerId: washer._id,
-      hour: { $regex: new RegExp(hour, "i") },
-    });
-
-    if (!washerAvailableHour) {
-      return res.status(400).json({ errors: ["O horário especificado não está disponível para este lavador."] });
+    if (!availableHour) {
+      return res.status(400).json({ errors: ["Horário não disponível para este lavador."] });
     }
 
     // Verifica se já existe uma lavagem com o mesmo lavador, horário e data
     const existingWash = await Wash.findOne({
       "washer.name": name,
-      "washer.hour": hour,
+      hour,
       date,
     });
 
     if (existingWash) {
-      return res.status(400).json({ errors: ["Este lavador, horário e data já foram escolhidos."] });
+      return res.status(400).json({ errors: ["Este lavador, horário e data já foram escolhidos. Você será redirecionado"] });
     }
 
     // Cria uma nova lavagem associada ao carro existente
@@ -62,15 +62,16 @@ const insertWash = async (req, res) => {
       },
       washer: {
         name: washer.name,
-        hour: hour
       },
+      hour: hour, // Apenas hour, sem o objeto externo
+      date,
       washerId: washer._id,
+      hourId: availableHour._id, // Defina o ID da hora selecionada para o campo hourId
       washerPrice: washer.price,
       userId: user._id,
       userName: user.name,
-      date,
     });
-    
+
     // Se a lavagem for criada com sucesso, retorna os dados
     return res.status(201).json(newWash);
   } catch (error) {
@@ -165,5 +166,5 @@ module.exports = {
   getAllWashes,
   getUserWashes,
   getWasherWashes,
-  getWashById,
+  getWashById
 }

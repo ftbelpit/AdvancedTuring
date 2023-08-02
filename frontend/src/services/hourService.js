@@ -42,10 +42,23 @@ const getHours = async (washerId) => {
   }
 }
 
+const getAvailableHours = async (washerId, date) => {
+  const config = requestConfig("GET", null, true);
+
+  try {
+    const res = await fetch(api + "/hours/washer/available-hours/" + washerId + "/" + date, config);
+    const jsonData = await res.json();
+    return jsonData;
+  } catch (error) {
+    console.log(error)
+  }
+};
+
 const hourService = {
   insertHour,
   deleteHour,
-  getHours
+  getHours,
+  getAvailableHours
 }
 
 export default hourService
