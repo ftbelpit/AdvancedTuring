@@ -145,6 +145,7 @@ const AddWash = () => {
                     setFabricante(e.target.value);
                   }}
                   value={fabricante || ""}
+                  disabled
                 >
                   <option value="">Escolha o fabricante do carro</option>
                   {cars.map((car) => (
@@ -160,6 +161,7 @@ const AddWash = () => {
                 <select
                   onChange={(e) => setModelo(e.target.value)}
                   value={modelo || ""}
+                  disabled
                 >
                   <option>Escolha o modelo do carro</option>
                   {cars.map((car) => (
@@ -174,6 +176,7 @@ const AddWash = () => {
                 <select
                   onChange={(e) => setAno(e.target.value)}
                   value={ano || ""}
+                  disabled
                 >
                   <option>Escolha o ano do carro</option>
                   {cars.map((car) => (
@@ -188,6 +191,7 @@ const AddWash = () => {
                 <select
                   onChange={(e) => setName(e.target.value)}
                   value={name || ""}
+                  disabled
                 >
                   <option>Escolha o lavador</option>
                   {washers.map((washer) => (
@@ -203,9 +207,10 @@ const AddWash = () => {
                   type="text"
                   onChange={(e) => setDate(e.target.value)}
                   value={date ? format(parse(date, "dd-MM-yyyy", new Date()), "dd/MM/yyyy") : ""}
+                  disabled
                 />
               </div>
-              <div className="add-wash-card">
+              <div className="add-hour-wash-card">
                 <label>Horário</label>
                 <select
                   onChange={(e) => setHour(e.target.value)}

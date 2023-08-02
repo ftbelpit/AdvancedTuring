@@ -194,10 +194,59 @@ select:hover {
   margin-bottom: .6em;
 }
 
+.popup-content-date span {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding-bottom: 5px;
+}
+
 .date-icon {
   position: absolute;
-  top: 35%;
+  top: 18%;
   right: 10px;
   transform: translateY(-50%);
   pointer-events: none;
+}
+
+.overlay-date {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(22, 22, 22, 0.959); /* Cinza claro com opacidade */
+  z-index: 999;
+}
+
+.popup-date {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #BCF7FF;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgb(0, 0, 0);
+}
+
+.popup-content-date {
+  background-color: #fff;
+  height: 85%;
+  padding: 20px;
+  border-radius: 5px;
+  border: 1px solid #000;
+  box-shadow: 0 2px 8px rgb(0, 0, 0);
+}
+ 
+.popup-content-date input {
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #000;
+  box-shadow: 0 2px 8px rgb(0, 0, 0);
+}
+
+.button-date {
+  padding-top: 10px;
 }

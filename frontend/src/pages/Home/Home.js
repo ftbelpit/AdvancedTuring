@@ -9,7 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { BsFillCalendarCheckFill } from "react-icons/bs"
 
 // hooks
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // redux
@@ -29,6 +29,7 @@ const formatDateToDDMMYYYY = (date) => {
 
 const Home = () => {
   const [showPopup, setShowPopup] = useState(false);
+  const [showDatePopup, setShowDatePopup] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState("name");
   const [selectedCar, setSelectedCar] = useState(null);
   const [date, setDate] = useState("")
@@ -44,10 +45,26 @@ const Home = () => {
 
   const navigate = useNavigate()
 
+  const popupRef = useRef(null);
+
   useEffect(() => {
     dispatch(getUserCars(id));
     dispatch(getWashers());
   }, [dispatch, id]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        setShowDatePopup(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const resetComponentMessage = () => {
     setTimeout(() => {
@@ -56,7 +73,7 @@ const Home = () => {
   };
 
   const handleWashButtonClick = (washerName, washerId) => {
-    if (!selectedCar) {
+    if (!selectedCar || !date) {
       setShowPopup(true);
     } else {
       const { fabricante, modelo, ano } = selectedCar;
@@ -77,6 +94,11 @@ const Home = () => {
 
   const closePopup = () => {
     setShowPopup(false);
+    setShowDatePopup(false);
+  };
+
+  const handleDateButtonClick = () => {
+    setShowDatePopup(true);
   };
   
   const handleSelectOrder = (e) => {
@@ -150,6 +172,7 @@ const Home = () => {
 
               setSelectedCar(selectedCar);
             }}
+            onClick={handleDateButtonClick}
           >
             <option>Selecione um carro</option>
             {cars &&
@@ -166,18 +189,41 @@ const Home = () => {
           </select>
         </div>
         {selectedCar && (
-          <div className="date-input">
-            <DatePicker
-              placeholderText="Escolha a data"
-              selected={date}
-              onChange={(date) => setDate(date)}
-              minDate={new Date()}
-              filterDate={(date) => !isWeekend(date)}
-              dateFormat="dd-MM-yyyy" // Atualizado para o formato "dd-MM-yyyy"
-              locale="pt-BR"
-            />
-            <BsFillCalendarCheckFill className="date-icon" />
-          </div>
+          <>
+          {showDatePopup && (
+            <div
+              className="overlay-date"
+              onClick={(e) => {
+                if (popupRef.current && !popupRef.current.contains(e.target)) {
+                  setShowPopup(false);
+                }
+              }}
+            >
+              <div className="popup-date" ref={popupRef}>
+                <div className="popup-content-date">
+                  <h2>Adicionar Data</h2>
+                    <span>Escolha a data:</span>
+                    <div className="date-input">
+                      <div>
+                        <DatePicker
+                          selected={date}
+                          onChange={(date) => setDate(date)}
+                          minDate={new Date()}
+                          filterDate={(date) => !isWeekend(date)}
+                          dateFormat="dd-MM-yyyy" // Atualizado para o formato "dd-MM-yyyy"
+                          locale="pt-BR"
+                        />
+                        <BsFillCalendarCheckFill className="date-icon" />
+                      </div>
+                      <div className="button-date">
+                        <button onClick={closePopup}>Escolher lavador</button>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          )}    
+          </> 
         )}
         <div className="select2">
           <span>Ordenar por:</span>

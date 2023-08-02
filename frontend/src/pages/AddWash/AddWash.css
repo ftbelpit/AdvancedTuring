@@ -16,12 +16,14 @@
   position: relative;
 }
 
-.add-wash-card label {
+.add-wash-card label,
+.add-hour-wash-card label{
   padding-top: 15px;
 }
 
 .add-wash-card input,
-.add-wash-card select {
+.add-wash-card select,
+.add-hour-wash-card select {
   width: 195px;
   border-radius: 10px;
   padding: 7px;
@@ -33,6 +35,18 @@
 
 .add-wash-card select {
   width: 210px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.add-hour-wash-card select {
+  width: 210px;
+}
+
+/* Estilizar a seta em navegadores que não suportam 'appearance: none' */
+.add-wash-card select::-ms-expand {
+  display: none;
 }
 
 .add-wash-card input::placeholder{
