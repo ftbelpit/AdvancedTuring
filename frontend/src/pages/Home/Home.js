@@ -202,15 +202,16 @@ const Home = () => {
               <div className="popup-date" ref={popupRef}>
                 <div className="popup-content-date">
                   <h2>Adicionar Data</h2>
-                    <span>Escolha a data:</span>
+                    <span>Escolha a data da lavagem:</span>
                     <div className="date-input">
                       <div>
                         <DatePicker
+                          placeholderText="dd/mm/aaaa"
                           selected={date}
                           onChange={(date) => setDate(date)}
                           minDate={new Date()}
                           filterDate={(date) => !isWeekend(date)}
-                          dateFormat="dd-MM-yyyy" // Atualizado para o formato "dd-MM-yyyy"
+                          dateFormat="dd/MM/yyyy" // Atualizado para o formato "dd-MM-yyyy"
                           locale="pt-BR"
                         />
                         <BsFillCalendarCheckFill className="date-icon" />
